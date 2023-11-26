@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/beginGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="24dp"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="24dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/aboutContainer"
+        style="@style/Form"
+        app:layout_constraintStart_toStartOf="@id/beginGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/firstNameHintTextView"
+            style="@style/HintTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_first_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/lastNameHintTextView"
+            style="@style/HintTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_last_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/firstNameHintTextView" />
+
+        <TextView
+            android:id="@+id/emailHintTextView"
+            style="@style/HintTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_email"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lastNameHintTextView" />
+
+        <TextView
+            android:id="@+id/mobileHintTextView"
+            style="@style/HintTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_mobile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emailHintTextView" />
+
+        <TextView
+            android:id="@+id/passwordHintTextView"
+            style="@style/HintTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_password"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mobileHintTextView" />
+
+        <TextView
+            android:id="@+id/roleHintTextView"
+            style="@style/HintTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_role"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/passwordHintTextView" />
+
+        <TextView
+            android:id="@+id/pushNotificationHintTextView"
+            style="@style/HintTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/push_notif"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/roleHintTextView" />
+
+        <TextView
+            android:id="@+id/smsNotificationHintTextView"
+            style="@style/HintTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/sms_notif"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pushNotificationHintTextView" />
+
+        <TextView
+            android:id="@+id/emailNotificationHintTextView"
+            style="@style/HintTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/email_notif"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/smsNotificationHintTextView" />
+
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="pushNotificationHintTextView,smsNotificationHintTextView,emailNotificationHintTextView,mobileHintTextView,emailHintTextView,lastNameHintTextView,firstNameHintTextView"/>
+
+        <EditText
+            android:id="@+id/firstNameEditText"
+            style="@style/HintTextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/barrier"
+            app:layout_constraintBaseline_toBaselineOf="@id/firstNameHintTextView" />
+
+        <EditText
+            android:id="@+id/lastNameEditText"
+            style="@style/HintTextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/barrier"
+            app:layout_constraintBaseline_toBaselineOf="@id/lastNameHintTextView" />
+
+        <EditText
+            android:id="@+id/emailEditText"
+            style="@style/HintTextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/barrier"
+            app:layout_constraintBaseline_toBaselineOf="@id/emailHintTextView" />
+
+        <EditText
+            android:id="@+id/mobileEditText"
+            style="@style/HintTextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/barrier"
+            app:layout_constraintBaseline_toBaselineOf="@id/mobileHintTextView" />
+
+        <EditText
+            android:id="@+id/passwordEditText"
+            style="@style/HintTextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/barrier"
+            app:layout_constraintBaseline_toBaselineOf="@id/passwordHintTextView" />
+
+        <Spinner
+            android:id="@+id/roleSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/role_options"
+            app:layout_constraintStart_toStartOf="@id/barrier"
+            app:layout_constraintTop_toBottomOf="@id/passwordEditText" />
+
+        <CheckBox
+            android:id="@+id/pushNotificationCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/barrier"
+            app:layout_constraintBaseline_toBaselineOf="@id/pushNotificationHintTextView"/>
+
+        <CheckBox
+            android:id="@+id/smsNotificationCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/barrier"
+            app:layout_constraintBaseline_toBaselineOf="@id/smsNotificationHintTextView"/>
+
+        <CheckBox
+            android:id="@+id/emailNotificationCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/barrier"
+            app:layout_constraintBaseline_toBaselineOf="@id/emailNotificationHintTextView"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

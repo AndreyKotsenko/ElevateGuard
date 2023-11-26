@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@id/manager_users"
+        android:title="@string/users"
+        android:icon="@drawable/ic_users"/>
+    <item android:id="@id/manager_constructions"
+        android:title="@string/constructions"
+        android:icon="@drawable/ic_construction" />
+    <item android:id="@id/manager_incidents"
+        android:title="@string/incidents"
+        android:icon="@drawable/ic_incidents" />
+    <item android:id="@id/manager_settings"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_manage_accounts" />
+
+</menu>

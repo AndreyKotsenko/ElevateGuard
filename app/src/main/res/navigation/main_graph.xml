@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sign_in_graph"
+    app:startDestination="@id/signInFragment">
+
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.akotsenko.elevateguard.screens.auth.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_userTabsFragment"
+            app:destination="@id/userTabsFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_enterCompanyFragment"
+            app:destination="@id/enterCompanyFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_managerTabsFragment"
+            app:destination="@id/managerTabsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userTabsFragment"
+        android:name="com.akotsenko.elevateguard.screens.user.UserTabsFragment"
+        android:label="fragment_user_tabs"
+        tools:layout="@layout/fragment_user_tabs" />
+    <fragment
+        android:id="@+id/enterCompanyFragment"
+        android:name="com.akotsenko.elevateguard.screens.auth.EnterCompanyFragment"
+        android:label="fragment_enter_company"
+        tools:layout="@layout/fragment_enter_company" >
+        <action
+            android:id="@+id/action_enterCompanyFragment_to_managerTabsFragment"
+            app:destination="@id/managerTabsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/managerTabsFragment"
+        android:name="com.akotsenko.elevateguard.screens.manager.ManagerTabsFragment"
+        android:label="fragment_manager_tabs"
+        tools:layout="@layout/fragment_manager_tabs" />
+</navigation>

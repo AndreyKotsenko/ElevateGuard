@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/manager_users"
+    app:startDestination="@id/managerUsersFragment">
+
+    <fragment
+        android:id="@+id/managerUsersFragment"
+        android:name="com.akotsenko.elevateguard.screens.manager.ManagerUsersFragment"
+        android:label="ManagerUsersFragment" />
+</navigation>

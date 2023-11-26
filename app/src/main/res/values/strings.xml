@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">ElevateGuard</string>
+    <string name="field_email">Email</string>
+    <string name="field_password">Password</string>
+    <string name="action_sign_in">Sign In</string>
+    <string name="field_company">Company</string>
+    <string name="action_enter_company">Enter</string>
+    <string name="settings">Settings</string>
+    <string name="constructions">Constructions</string>
+    <string name="incidents">Incidents</string>
+    <string name="info">Info</string>
+    <string name="users">Users</string>
+    <string name="user_info">User info</string>
+    <string name="user_first_name">First name:</string>
+    <string name="user_last_name">Last name:</string>
+    <string name="user_email">Email:</string>
+    <string name="user_mobile">Mobile:</string>
+    <string name="user_password">Password:</string>
+    <string name="user_role">Role:</string>>
+    <string name="add_btn">Add</string>
+    <string name="push_notif">Push notif:</string>
+    <string name="sms_notif">SMS notif:</string>
+    <string name="email_notif">Email notif:</string>
+    <string name="logout">Logout</string>
+    <string name="construction_name">Construction name</string>
+    <string name="company_info">Company info</string>
+    <string name="manager_info">Manager info</string>
+    <string name="save_company_info">Save company info</string>
+    <string name="save_manager_info">Save manager info</string>
+    <string name="save_btn">Save</string>
+
+    <string-array name="role_options">
+        <item>USER</item>
+        <item>MANAGER</item>
+    </string-array>
+</resources>
