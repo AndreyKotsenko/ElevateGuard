@@ -2,5 +2,5 @@ package com.akotsenko.elevateguard
 
 object Const {
 
-    const val BASE_URL = "your_http_env/api/"
+    const val BASE_URL = "HTTP_ENV/api/"
 }
