@@ -11,36 +11,30 @@ class RetrofitFacilitySource : BaseRetrofitSource(), FacilitySource {
 
     private val facilityApi = retrofit.create(FacilityApi::class.java)
 
-    override suspend fun getFacility(authToken: String, facilityId: String): Facility {
-        return facilityApi.getFacility(BEARER_TOKEN + authToken, facilityId).toFacility()
+    override suspend fun getFacility(authToken: String, facilityId: String): Facility = wrapRetrofitExceptions {
+        facilityApi.getFacility(BEARER_TOKEN + authToken, facilityId).toFacility()
     }
 
-    override suspend fun createFacility(authToken: String, name: String): Int {
+    override suspend fun createFacility(authToken: String, name: String): Int = wrapRetrofitExceptions {
         val createFacilityRequestEntity = CreateFacilitiesRequestEntity(
             name = name
         )
-        return facilityApi.createFacility(BEARER_TOKEN + authToken, createFacilityRequestEntity).id
+        facilityApi.createFacility(BEARER_TOKEN + authToken, createFacilityRequestEntity).id
     }
 
     override suspend fun updateFacility(
         authToken: String,
         facilityId: String,
         facility: Facility
-    ): String {
+    ): String = wrapRetrofitExceptions{
         val updateFacilityRequestEntity = UpdateFacilityRequestEntity(
             name = facility.name
         )
-        return facilityApi.updateFacility(BEARER_TOKEN + authToken, facilityId, updateFacilityRequestEntity)
+        facilityApi.updateFacility(BEARER_TOKEN + authToken, facilityId, updateFacilityRequestEntity)
     }
 
-    override suspend fun getUsersByFacility(authToken: String, facilityId: String): List<User> {
-        try {
-            println("DATA: " + authToken + " and facilityId: " + facilityId)
-            return facilityApi.getUsersByFacility(BEARER_TOKEN + authToken, facilityId).toUsers()
-        } catch (e: Exception){
-            println("ERROR = " + e.message)
-            return emptyList()
-        }
+    override suspend fun getUsersByFacility(authToken: String, facilityId: String): List<User> = wrapRetrofitExceptions {
+        facilityApi.getUsersByFacility(BEARER_TOKEN + authToken, facilityId).toUsers()
     }
 
     companion object {

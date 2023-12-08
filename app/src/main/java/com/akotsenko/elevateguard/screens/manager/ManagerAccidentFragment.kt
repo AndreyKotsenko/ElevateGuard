@@ -13,6 +13,7 @@ import com.akotsenko.elevateguard.R
 import com.akotsenko.elevateguard.databinding.DialogAddAccidentBinding
 import com.akotsenko.elevateguard.databinding.FragmentManagerAccidentBinding
 import com.akotsenko.elevateguard.screens.adapters.ManagerAccidentAdapter
+import com.akotsenko.elevateguard.utils.observeToSignInScreen
 
 class ManagerAccidentFragment: Fragment(R.layout.fragment_manager_accident) {
 
@@ -36,6 +37,7 @@ class ManagerAccidentFragment: Fragment(R.layout.fragment_manager_accident) {
         observeAccidents()
         getAccidents()
         observeConstructions()
+        observeToSignInScreen(viewModel.navigateToSignInEvent)
 
         binding.accidentList.adapter = adapter
         binding.addButon.setOnClickListener {onAddPressed()}

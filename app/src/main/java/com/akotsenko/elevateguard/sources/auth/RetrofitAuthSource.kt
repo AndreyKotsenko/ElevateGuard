@@ -13,23 +13,26 @@ class RetrofitAuthSource: BaseRetrofitSource(), AuthSource {
 
     private val authApi = retrofit.create(AuthApi::class.java)
 
-    override suspend fun login(loginData: Credential): Account {
+    override suspend fun login(loginData: Credential): Account = wrapRetrofitExceptions {
         val loginRequestData = LoginRequestEntity(
             email = loginData.email,
             password = loginData.password
         )
 
-        return authApi.login(loginRequestData).toAccount()
+        println("GEY = " + loginRequestData.email)
+        val result = authApi.login(loginRequestData).toAccount()
+        println("MUST CHLEN = " + result.toString())
+        result
     }
 
-    override suspend fun logout(authToken: String): String {
-        return authApi.logout(BEARER_TOKEN + authToken).message
+    override suspend fun logout(authToken: String): String = wrapRetrofitExceptions {
+        authApi.logout(BEARER_TOKEN + authToken).message
     }
 
     override suspend fun register(
         authToken: String,
         registerData: RegisterData
-    ): Account {
+    ): Account = wrapRetrofitExceptions {
         val registerRequestEntity = RegisterRequestEntity(
             userFirstName = registerData.userFirstName,
             userLastName = registerData.userLastName,
@@ -44,7 +47,7 @@ class RetrofitAuthSource: BaseRetrofitSource(), AuthSource {
             userIsReceiveEmailNotification = registerData.userIsReceiveEmailNotification
         )
 
-        return authApi.register(BEARER_TOKEN + authToken, registerRequestEntity).toAccount()
+        authApi.register(BEARER_TOKEN + authToken, registerRequestEntity).toAccount()
     }
 
     companion object {

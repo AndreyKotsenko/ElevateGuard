@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.navOptions
 import com.akotsenko.elevateguard.R
 import com.akotsenko.elevateguard.databinding.FragmentUserSettingsBinding
 import com.akotsenko.elevateguard.model.user.entities.User
-import com.akotsenko.elevateguard.utils.findTopNavController
-import com.akotsenko.elevateguard.utils.observeEvent
+import com.akotsenko.elevateguard.utils.observeToSignInScreen
 
 class UserSettingsFragment: Fragment(R.layout.fragment_user_settings) {
 
@@ -27,7 +25,7 @@ class UserSettingsFragment: Fragment(R.layout.fragment_user_settings) {
 
         viewModel = ViewModelProvider(this).get(UserSettingsViewModel::class.java)
 
-        observeToSignInScreen()
+        observeToSignInScreen(viewModel.navigateToSignInEvent)
         observeUser()
         viewModel.getUser()
 
@@ -71,14 +69,5 @@ class UserSettingsFragment: Fragment(R.layout.fragment_user_settings) {
     private fun observeUser() = viewModel.user.observe(viewLifecycleOwner) {
         setUserInfo(it)
     }
-
-    private fun observeToSignInScreen() = viewModel.navigateToSignInEvent.observeEvent(viewLifecycleOwner) {
-        findTopNavController().navigate(R.id.signInFragment, null, navOptions {
-            popUpTo(R.id.signInFragment) {
-                inclusive = true
-            }
-        })
-    }
-
 
 }

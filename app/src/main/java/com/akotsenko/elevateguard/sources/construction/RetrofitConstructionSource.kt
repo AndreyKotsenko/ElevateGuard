@@ -14,29 +14,31 @@ class RetrofitConstructionSource: BaseRetrofitSource(), ConstructionSource {
     override suspend fun createConstruction(
         authToken: String,
         construction: Construction
-    ): Construction {
+    ): Construction = wrapRetrofitExceptions {
         val createConstructionRequestEntity = CreateConstructionRequestEntity(
             facilityId = construction.facilityId,
             name = construction.name
         )
 
-        return constructionApi.createConstruction(BEARER_TOKEN + authToken, createConstructionRequestEntity).toConstruction()
+        constructionApi.createConstruction(BEARER_TOKEN + authToken, createConstructionRequestEntity).toConstruction()
     }
 
     override suspend fun updateConstruction(
         authToken: String,
         constructionId: String,
         construction: Construction
-    ): String {
+    ): String = wrapRetrofitExceptions {
         val updateConstructionRequestEntity = UpdateConstructionRequestEntity(
             name = construction.name
         )
 
-        return constructionApi.updateConstruction(BEARER_TOKEN + authToken, constructionId, updateConstructionRequestEntity).message
+        constructionApi.updateConstruction(BEARER_TOKEN + authToken, constructionId, updateConstructionRequestEntity).message
     }
 
     override suspend fun deleteConstruction(authToken: String, constructionId: String) {
-        constructionApi.deleteConstruction(BEARER_TOKEN + authToken, constructionId)
+        wrapRetrofitExceptions {
+            constructionApi.deleteConstruction(BEARER_TOKEN + authToken, constructionId)
+        }
     }
 
     companion object {

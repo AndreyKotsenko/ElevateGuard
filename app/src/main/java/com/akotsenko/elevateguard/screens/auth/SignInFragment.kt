@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -34,6 +35,8 @@ class SignInFragment: Fragment(R.layout.fragment_sign_in) {
         observeNavigateToUserTabsEvent()
         observeNavigateToManagerTabsEvent()
         observeNavigateToEnterCompanyTabsEvent()
+        observeShowAuthErrorMessageEvent()
+        observeClearAllFieldsEvent()
 
         return binding.root
     }
@@ -46,7 +49,19 @@ class SignInFragment: Fragment(R.layout.fragment_sign_in) {
     }
 
     private fun observeState() = viewModel.state.observe(viewLifecycleOwner) {
+        binding.emailEditText.error = if (it.emptyEmailError) getString(R.string.field_is_empty) else null
+        binding.passwordEditText.error = if (it.emptyPasswordError) getString(R.string.field_is_empty) else null
+
         binding.progressBar.visibility = if (it.showProgress) View.VISIBLE else View.INVISIBLE
+    }
+
+    private fun observeShowAuthErrorMessageEvent() = viewModel.showAuthToastEvent.observeEvent(viewLifecycleOwner) {
+        Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+    }
+
+    private fun observeClearAllFieldsEvent() = viewModel.clearAllFieldsEvent.observeEvent(viewLifecycleOwner) {
+        binding.emailEditText.text?.clear()
+        binding.passwordEditText.text?.clear()
     }
 
     private fun observeNavigateToUserTabsEvent() = viewModel.navigateToUserTabsEvent.observeEvent(viewLifecycleOwner) {

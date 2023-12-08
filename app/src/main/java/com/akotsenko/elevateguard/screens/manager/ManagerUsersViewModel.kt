@@ -9,13 +9,14 @@ import com.akotsenko.elevateguard.model.auth.entities.RegisterData
 import com.akotsenko.elevateguard.model.facility.FacilityRepository
 import com.akotsenko.elevateguard.model.user.UserRepository
 import com.akotsenko.elevateguard.model.user.entities.User
+import com.akotsenko.elevateguard.screens.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class ManagerUsersViewModel(
     private val userRepository: UserRepository = Singletons.userRepository,
     private val facilityRepository: FacilityRepository = Singletons.facilityRepository,
     private val authRepository: AuthRepository = Singletons.authRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _users = MutableLiveData<List<User>>()
     val users = _users

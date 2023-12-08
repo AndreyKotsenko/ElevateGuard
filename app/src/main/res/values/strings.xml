@@ -28,6 +28,8 @@
     <string name="save_company_info">Save company info</string>
     <string name="save_manager_info">Save manager info</string>
     <string name="save_btn">Save</string>
+    <string name="field_is_empty">Field is empty</string>
+    <string name="edit_btn">Edit</string>
 
     <string-array name="role_options">
         <item>USER</item>

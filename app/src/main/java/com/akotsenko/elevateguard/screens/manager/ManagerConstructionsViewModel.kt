@@ -1,22 +1,25 @@
 package com.akotsenko.elevateguard.screens.manager
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.akotsenko.elevateguard.Singletons
+import com.akotsenko.elevateguard.model.AuthException
+import com.akotsenko.elevateguard.model.EmptyFieldException
+import com.akotsenko.elevateguard.model.Field
 import com.akotsenko.elevateguard.model.construction.ConstructionRepository
 import com.akotsenko.elevateguard.model.construction.entities.Construction
 import com.akotsenko.elevateguard.model.facility.FacilityRepository
-import com.akotsenko.elevateguard.screens.auth.SignInViewModel
+import com.akotsenko.elevateguard.screens.base.BaseViewModel
+import com.akotsenko.elevateguard.utils.requireValue
 import kotlinx.coroutines.launch
 
 
 class ManagerConstructionsViewModel(
     private val constructionRepository: ConstructionRepository = Singletons.constructionRepository,
     private val facilityRepository: FacilityRepository = Singletons.facilityRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
-    private val _state = MutableLiveData(SignInViewModel.State())
+    private val _state = MutableLiveData(State())
     val state = _state
 
     private val _constructions = MutableLiveData<List<Construction>>()
@@ -26,8 +29,13 @@ class ManagerConstructionsViewModel(
     fun getConstructions() {
         viewModelScope.launch {
             showProgress()
-            _constructions.value = facilityRepository.getConstructionOfFacility()
-            hideProgress()
+            try {
+                _constructions.value = facilityRepository.getConstructionOfFacility()
+            } catch (e: AuthException) {
+                launchSignInScreen()
+            } finally {
+                hideProgress()
+            }
 
         }
     }
@@ -35,46 +43,70 @@ class ManagerConstructionsViewModel(
     fun updateConstruction(name: String, constructionId: String) {
         viewModelScope.launch {
             showProgress()
-            constructionRepository.updateConstruction(constructionId, Construction(name = name))
-            _constructions.value = facilityRepository.getConstructionOfFacility()
-            hideProgress()
+            try {
+                constructionRepository.updateConstruction(constructionId, Construction(name = name))
+                _constructions.value = facilityRepository.getConstructionOfFacility()
+            } catch (e: AuthException) {
+                launchSignInScreen()
+            } catch (e: EmptyFieldException) {
+                processEmptyFieldException(e)
+            } finally {
+                hideProgress()
+            }
         }
     }
 
     fun createConstruction(name: String) {
         viewModelScope.launch {
             showProgress()
-            constructionRepository.createConstruction(Construction(name = name))
-            _constructions.value = facilityRepository.getConstructionOfFacility()
-            hideProgress()
+            try {
+                constructionRepository.createConstruction(Construction(name = name))
+                _constructions.value = facilityRepository.getConstructionOfFacility()
+            } catch (e: AuthException) {
+                launchSignInScreen()
+            } catch (e: EmptyFieldException) {
+                processEmptyFieldException(e)
+            } finally {
+                hideProgress()
+            }
         }
     }
 
     fun deleteConstruction(constructionId: String) {
         viewModelScope.launch {
             showProgress()
-            constructionRepository.deleteConstruction(constructionId)
-            _constructions.value = facilityRepository.getConstructionOfFacility()
-            hideProgress()
+            try {
+                constructionRepository.deleteConstruction(constructionId)
+                _constructions.value = facilityRepository.getConstructionOfFacility()
+            } catch (e: AuthException) {
+                launchSignInScreen()
+            } finally {
+                hideProgress()
+            }
         }
 
     }
 
+    private fun processEmptyFieldException(e: EmptyFieldException) {
+        _state.value = _state.requireValue().copy(
+            emptyConstructionNameError = e.field == Field.ConstructionName
+        )
+    }
+
 
     private fun showProgress() {
-        _state.value = SignInViewModel.State(signInInProgress = true)
+        _state.value = _state.value?.copy(progress = true)
     }
 
     private fun hideProgress() {
-        _state.value = _state.value?.copy(signInInProgress = false)
+        _state.value = _state.value?.copy(progress = false)
     }
 
     data class State(
-        val emptyEmailError: Boolean = false,
-        val emptyPasswordError: Boolean = false,
-        val signInInProgress: Boolean = false
+        val emptyConstructionNameError: Boolean = false,
+        val progress: Boolean = false
     ) {
-        val showProgress: Boolean get() = signInInProgress
+        val showProgress: Boolean get() = progress
     }
 
 }

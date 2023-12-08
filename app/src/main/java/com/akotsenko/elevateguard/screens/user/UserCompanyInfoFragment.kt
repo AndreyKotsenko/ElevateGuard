@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.akotsenko.elevateguard.*
 import com.akotsenko.elevateguard.databinding.FragmentUserCompanyInfoBinding
 import com.akotsenko.elevateguard.screens.adapters.UserConstructionsAdapter
+import com.akotsenko.elevateguard.utils.observeToSignInScreen
 
 class UserCompanyInfoFragment: Fragment(R.layout.fragment_user_company_info) {
 
@@ -30,8 +31,10 @@ class UserCompanyInfoFragment: Fragment(R.layout.fragment_user_company_info) {
 
         adapter = UserConstructionsAdapter(requireContext(), emptyList())
         binding.constructionList.adapter = adapter
+        observeToSignInScreen(viewModel.navigateToSignInEvent)
 
         observeConstructions()
+        observeState()
 
         viewModel.getConstructionsOfFacility()
 
@@ -41,5 +44,9 @@ class UserCompanyInfoFragment: Fragment(R.layout.fragment_user_company_info) {
 
     private fun observeConstructions() = viewModel.constructions.observe(viewLifecycleOwner) {
         adapter.setList(it)
+    }
+
+    private fun observeState() = viewModel.state.observe(viewLifecycleOwner) {
+        binding.progressBar.visibility = if (it.showProgress) View.VISIBLE else View.INVISIBLE
     }
 }

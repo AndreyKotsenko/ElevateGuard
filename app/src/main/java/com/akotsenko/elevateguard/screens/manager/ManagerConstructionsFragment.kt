@@ -14,6 +14,7 @@ import com.akotsenko.elevateguard.databinding.DialogEditConstructionBinding
 import com.akotsenko.elevateguard.databinding.FragmentManagerConstructionsBinding
 import com.akotsenko.elevateguard.model.construction.entities.Construction
 import com.akotsenko.elevateguard.screens.adapters.ManagerConstructionAdapter
+import com.akotsenko.elevateguard.utils.observeToSignInScreen
 
 
 class ManagerConstructionsFragment: Fragment(R.layout.fragment_manager_constructions) {
@@ -21,6 +22,8 @@ class ManagerConstructionsFragment: Fragment(R.layout.fragment_manager_construct
     private lateinit var binding: FragmentManagerConstructionsBinding
     private lateinit var viewModel: ManagerConstructionsViewModel
     private lateinit var adapter: ManagerConstructionAdapter
+    private lateinit var addConstructionDialog: AlertDialog
+    private lateinit var editConstructionDialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +41,7 @@ class ManagerConstructionsFragment: Fragment(R.layout.fragment_manager_construct
         observeState()
         observeConstructions()
         getConstructions()
+        observeToSignInScreen(viewModel.navigateToSignInEvent)
 
         binding.constructionsList.adapter = adapter
         binding.addButon.setOnClickListener { onAddPressed() }
@@ -56,42 +60,56 @@ class ManagerConstructionsFragment: Fragment(R.layout.fragment_manager_construct
     private fun editConstructionInfo(construction: Construction) {
         val dialogBinding = DialogEditConstructionBinding.inflate(layoutInflater)
         dialogBinding.constructionNameEditText.setText(construction.name)
+        dialogBinding.edit.setOnClickListener {
+            viewModel.updateConstruction(dialogBinding.constructionNameEditText.text.toString(), construction.id.toString())
 
-        val listener = DialogInterface.OnClickListener { dialog, which ->
-            if(which == DialogInterface.BUTTON_POSITIVE) {
-
-                viewModel.updateConstruction(dialogBinding.constructionNameEditText.text.toString(), construction.id.toString())
+            if(dialogBinding.constructionNameEditText.text.isNotBlank()){
+                viewModel.getConstructions()
+                editConstructionDialog.dismiss()
+            } else {
+                with(dialogBinding) {
+                    constructionNameEditText.error = if(constructionNameEditText.text.isBlank()) getString(R.string.field_is_empty) else null
+                }
             }
         }
 
-        val dialog = AlertDialog.Builder(requireContext())
+        editConstructionDialog = AlertDialog.Builder(requireContext())
             .setTitle("Edit construction")
             .setView(dialogBinding.root)
-            .setPositiveButton("Edit", listener)
-            .setNegativeButton("Cancel", listener)
+            .setNegativeButton("Cancel", null)
             .create()
-        dialog.show()
+        editConstructionDialog.show()
 
 
     }
 
     private fun onAddPressed() {
         val dialogBinding = DialogAddConstructionBinding.inflate(layoutInflater)
-        val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Add construction")
-            .setView(dialogBinding.root)
-            .setPositiveButton("Add") {d, which ->
-                viewModel.createConstruction(dialogBinding.constructionNameEditText.text.toString())
+        dialogBinding.add.setOnClickListener {
+            viewModel.createConstruction(dialogBinding.constructionNameEditText.text.toString())
+
+            if(dialogBinding.constructionNameEditText.text.isNotBlank()){
                 viewModel.getConstructions()
+                addConstructionDialog.dismiss()
+            } else {
+                with(dialogBinding) {
+                    constructionNameEditText.error = if(constructionNameEditText.text.isBlank()) getString(R.string.field_is_empty) else null
+                }
             }
+        }
+
+        addConstructionDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Add construction")
+            .setNegativeButton("Cancel", null)
+            .setView(dialogBinding.root)
             .create()
-        dialog.show()
+
+        addConstructionDialog.show()
     }
 
     private fun deleteCharacter(construction: Construction) {
         val listener = DialogInterface.OnClickListener { dialog, which ->
             if(which == DialogInterface.BUTTON_POSITIVE) {
-
                 viewModel.deleteConstruction(construction.id.toString())
                 viewModel.getConstructions()
             }

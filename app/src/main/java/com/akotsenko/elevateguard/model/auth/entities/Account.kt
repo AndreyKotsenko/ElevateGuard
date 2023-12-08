@@ -7,7 +7,7 @@ data class Account (
     val id: Int,
     val firstName: String,
     val lastName: String,
-    val positionId: Int,
+    val positionId: Int? = null,
     val facilityId: Int,
     val email: String,
     val mobile: String,
