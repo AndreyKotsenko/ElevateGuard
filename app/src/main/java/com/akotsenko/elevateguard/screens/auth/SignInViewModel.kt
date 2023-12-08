@@ -32,9 +32,6 @@ class SignInViewModel(private val authRepository: AuthRepository = Singletons.au
     private val _navigateToManagerTabsEvent = MutableUnitLiveEvent()
     val navigateToManagerTabsEvent = _navigateToManagerTabsEvent
 
-    private val _navigateToEnterCompanyEvent = MutableUnitLiveEvent()
-    val navigateToEnterCompanyEvent = _navigateToEnterCompanyEvent
-
     fun login(loginData: Credential) {
         viewModelScope.launch {
             showProgress()
@@ -43,8 +40,6 @@ class SignInViewModel(private val authRepository: AuthRepository = Singletons.au
 
                 if (account.role == USER_ROLE) {
                     launchUserTabsScreen()
-                } else if (account.role == MANAGER_ROLE && account.facilityId == 0) {
-                    launchEnterCompanyScreen()
                 } else {
                     launchManagerTabsScreen()
                 }
@@ -85,8 +80,6 @@ class SignInViewModel(private val authRepository: AuthRepository = Singletons.au
     private fun launchUserTabsScreen() = _navigateToUserTabsEvent.publishEvent()
 
     private fun launchManagerTabsScreen() = _navigateToManagerTabsEvent.publishEvent()
-
-    private fun launchEnterCompanyScreen() = _navigateToEnterCompanyEvent.publishEvent()
 
     data class State(
         val emptyEmailError: Boolean = false,

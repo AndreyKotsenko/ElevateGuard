@@ -34,7 +34,6 @@ class SignInFragment: Fragment(R.layout.fragment_sign_in) {
         observeState()
         observeNavigateToUserTabsEvent()
         observeNavigateToManagerTabsEvent()
-        observeNavigateToEnterCompanyTabsEvent()
         observeShowAuthErrorMessageEvent()
         observeClearAllFieldsEvent()
 
@@ -72,9 +71,6 @@ class SignInFragment: Fragment(R.layout.fragment_sign_in) {
         findNavController().navigate(R.id.action_signInFragment_to_managerTabsFragment)
     }
 
-    private fun observeNavigateToEnterCompanyTabsEvent() = viewModel.navigateToEnterCompanyEvent.observeEvent(viewLifecycleOwner) {
-        findNavController().navigate(R.id.action_signInFragment_to_enterCompanyFragment)
-    }
 
 
 }
