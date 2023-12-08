@@ -8,16 +8,21 @@ class RetrofitAccidentSource: BaseRetrofitSource(), AccidentSource {
 
     private val accidentApi = retrofit.create(AccidentApi::class.java)
 
-    override suspend fun getAccident(authToken: String, accidentId: Int): Accident {
-        return accidentApi.getAccidentById(accidentId = accidentId.toString(), authToken = authToken).toAccident()
-
+    override suspend fun getAccident(authToken: String, accidentId: Int): Accident = wrapRetrofitExceptions {
+        accidentApi.getAccidentById(accidentId = accidentId.toString(), authToken = BEARER_TOKEN + authToken).toAccident()
     }
 
-    override suspend fun getAccidentsByFacility(authToken: String, facilityId: Int): List<Accident> {
-        return accidentApi.getAccidentsByFacility(authToken, facilityId.toString()).toAccidents()
+    override suspend fun getAccidentsByFacility(authToken: String, facilityId: Int): List<Accident> = wrapRetrofitExceptions {
+        accidentApi.getAccidentsByFacility(BEARER_TOKEN + authToken, facilityId.toString()).toAccidents()
     }
 
     override suspend fun createAccident(authToken: String, constructionId: String) {
-        accidentApi.createAccident(authToken, constructionId)
+        wrapRetrofitExceptions {
+            accidentApi.createAccident(BEARER_TOKEN + authToken, constructionId)
+        }
+    }
+
+    companion object {
+        private const val BEARER_TOKEN = "Bearer "
     }
 }

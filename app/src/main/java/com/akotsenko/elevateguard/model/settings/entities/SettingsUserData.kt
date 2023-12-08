@@ -5,7 +5,7 @@ data class SettingsUserData(
     val userId: Int,
     val firstName: String,
     val lastName: String,
-    val positionId: Int,
+    val positionId: Int? = null,
     val facilityId: Int,
     val email: String,
     val mobile: String,

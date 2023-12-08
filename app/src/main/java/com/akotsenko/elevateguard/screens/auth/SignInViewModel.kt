@@ -4,18 +4,27 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.akotsenko.elevateguard.Singletons
+import com.akotsenko.elevateguard.model.EmptyFieldException
+import com.akotsenko.elevateguard.model.Field
+import com.akotsenko.elevateguard.model.SignInValidateException
 import com.akotsenko.elevateguard.model.auth.AuthRepository
 import com.akotsenko.elevateguard.model.auth.entities.Credential
-import com.akotsenko.elevateguard.utils.MutableUnitLiveEvent
-import com.akotsenko.elevateguard.utils.publishEvent
+import com.akotsenko.elevateguard.screens.base.BaseViewModel
+import com.akotsenko.elevateguard.utils.*
 import kotlinx.coroutines.launch
 
 
 class SignInViewModel(private val authRepository: AuthRepository = Singletons.authRepository) :
-    ViewModel() {
+    BaseViewModel() {
 
     private val _state = MutableLiveData(State())
     val state = _state
+
+    private val _clearAllFieldsEvent = MutableUnitLiveEvent()
+    val clearAllFieldsEvent = _clearAllFieldsEvent
+
+    private val _showAuthErrorToastEvent = MutableLiveEvent<String>()
+    val showAuthToastEvent = _showAuthErrorToastEvent.share()
 
     private val _navigateToUserTabsEvent = MutableUnitLiveEvent()
     val navigateToUserTabsEvent = _navigateToUserTabsEvent
@@ -29,19 +38,39 @@ class SignInViewModel(private val authRepository: AuthRepository = Singletons.au
     fun login(loginData: Credential) {
         viewModelScope.launch {
             showProgress()
-            val account = authRepository.login(loginData)
+            try {
+                val account = authRepository.login(loginData)
 
-            if(account.role == USER_ROLE) {
-                launchUserTabsScreen()
-            } else if(account.role == MANAGER_ROLE && account.facilityId == 0){
-                launchEnterCompanyScreen()
-            } else {
-                launchManagerTabsScreen()
+                if (account.role == USER_ROLE) {
+                    launchUserTabsScreen()
+                } else if (account.role == MANAGER_ROLE && account.facilityId == 0) {
+                    launchEnterCompanyScreen()
+                } else {
+                    launchManagerTabsScreen()
+                }
+            } catch (e: SignInValidateException) {
+                processSignInValidateException(e)
+            } catch (e: EmptyFieldException){
+                processEmptyFieldException(e)
+            } finally {
+                hideProgress()
             }
-
-            hideProgress()
         }
     }
+
+    private fun processSignInValidateException(e: SignInValidateException) {
+        clearAllFields()
+        showAuthErrorToast(e.message.toString())
+    }
+
+    private fun processEmptyFieldException(e: EmptyFieldException) {
+        _state.value = _state.requireValue().copy(
+            emptyEmailError = e.field == Field.Email,
+            emptyPasswordError = e.field == Field.Password,
+        )
+    }
+
+    private fun clearAllFields() = _clearAllFieldsEvent.publishEvent()
 
     private fun showProgress() {
         _state.value = State(signInInProgress = true)
@@ -50,6 +79,8 @@ class SignInViewModel(private val authRepository: AuthRepository = Singletons.au
     private fun hideProgress() {
         _state.value = _state.value?.copy(signInInProgress = false)
     }
+
+    private fun showAuthErrorToast(message: String) = _showAuthErrorToastEvent.publishEvent(message)
 
     private fun launchUserTabsScreen() = _navigateToUserTabsEvent.publishEvent()
 
@@ -63,7 +94,6 @@ class SignInViewModel(private val authRepository: AuthRepository = Singletons.au
         val signInInProgress: Boolean = false
     ) {
         val showProgress: Boolean get() = signInInProgress
-        val enableViews: Boolean get() = !signInInProgress
     }
 
     companion object {

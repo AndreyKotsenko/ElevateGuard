@@ -4,6 +4,7 @@ import com.akotsenko.elevateguard.sources.user.entities.GetUserResponseEntity
 import com.akotsenko.elevateguard.sources.user.entities.UpdateUserRequestEntity
 import com.akotsenko.elevateguard.sources.user.entities.UpdateUserResponseEntity
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -19,5 +20,5 @@ interface UserApi {
     suspend fun updateUser(@Header("Authorization") authToken: String, @Path("userId") userId: String, @Body user: UpdateUserRequestEntity): UpdateUserResponseEntity
 
     @DELETE("users/{userId}")
-    suspend fun deleteUser(@Header("Authorization") authToken: String, @Path("userId") userId: String)
+    suspend fun deleteUser(@Header("Authorization") authToken: String, @Path("userId") userId: String): Response<Void>
 }

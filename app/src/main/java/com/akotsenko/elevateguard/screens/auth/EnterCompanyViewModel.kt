@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.akotsenko.elevateguard.Singletons
 import com.akotsenko.elevateguard.model.facility.FacilityRepository
 import com.akotsenko.elevateguard.model.user.UserRepository
+import com.akotsenko.elevateguard.screens.base.BaseViewModel
 import com.akotsenko.elevateguard.utils.MutableUnitLiveEvent
 import com.akotsenko.elevateguard.utils.publishEvent
 import com.akotsenko.elevateguard.utils.share
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 class EnterCompanyViewModel(
     private val userRepository: UserRepository = Singletons.userRepository,
     private val facilityRepository: FacilityRepository = Singletons.facilityRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _state = MutableLiveData(State())
     val state = _state.share()

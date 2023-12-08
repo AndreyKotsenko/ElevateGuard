@@ -4,20 +4,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.akotsenko.elevateguard.Singletons
+import com.akotsenko.elevateguard.model.AuthException
 import com.akotsenko.elevateguard.model.accident.AccidentRepository
 import com.akotsenko.elevateguard.model.accident.entities.Accident
 import com.akotsenko.elevateguard.model.construction.entities.Construction
 import com.akotsenko.elevateguard.model.facility.FacilityRepository
 import com.akotsenko.elevateguard.screens.auth.SignInViewModel
+import com.akotsenko.elevateguard.screens.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class ManagerAccidentViewModel(
     private val accidentRepository: AccidentRepository = Singletons.accidentRepository,
     private val facilityRepository: FacilityRepository = Singletons.facilityRepository
 ) :
-    ViewModel() {
+    BaseViewModel() {
 
-    private val _state = MutableLiveData(SignInViewModel.State())
+    private val _state = MutableLiveData(State())
     val state = _state
 
     private val _accidents = MutableLiveData<List<Accident>>()
@@ -29,29 +31,44 @@ class ManagerAccidentViewModel(
     fun getAccidents() {
         viewModelScope.launch {
             showProgress()
-            _accidents.value = accidentRepository.getAccidentsByFacility()
-            hideProgress()
+            try {
+                _accidents.value = accidentRepository.getAccidentsByFacility()
+            } catch (e: AuthException) {
+                launchSignInScreen()
+            } finally {
+                hideProgress()
+            }
         }
     }
 
     fun getConstructions() {
         viewModelScope.launch {
-            _constructions.value = facilityRepository.getConstructionOfFacility()
+            try{
+                _constructions.value = facilityRepository.getConstructionOfFacility()
+            } catch (e: AuthException) {
+                launchSignInScreen()
+            }
+
         }
     }
 
     fun createAccident(constructionId: Int) {
         viewModelScope.launch {
             showProgress()
-            accidentRepository.createAccident(constructionId)
-            _accidents.value = accidentRepository.getAccidentsByFacility()
-            hideProgress()
+            try {
+                accidentRepository.createAccident(constructionId)
+                _accidents.value = accidentRepository.getAccidentsByFacility()
+            } catch (e: AuthException) {
+                launchSignInScreen()
+            } finally {
+                hideProgress()
+            }
         }
     }
 
 
     private fun showProgress() {
-        _state.value = SignInViewModel.State(signInInProgress = true)
+        _state.value = State(signInInProgress = true)
     }
 
     private fun hideProgress() {
@@ -59,8 +76,6 @@ class ManagerAccidentViewModel(
     }
 
     data class State(
-        val emptyEmailError: Boolean = false,
-        val emptyPasswordError: Boolean = false,
         val signInInProgress: Boolean = false
     ) {
         val showProgress: Boolean get() = signInInProgress

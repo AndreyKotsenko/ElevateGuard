@@ -21,7 +21,7 @@ data class RegisterResponseEntity(
             firstName = userFirstName,
             lastName = userLastName,
             id = userId,
-            positionId = userPositionId!!,
+            positionId = userPositionId,
             facilityId = userFacilityId,
             email = userEmail,
             mobile = userMobile,
