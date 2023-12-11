@@ -9,7 +9,6 @@ data class RegisterRequestEntity(
     @SerializedName("password") val userPassword: String,
     @SerializedName("mobile") val userMobile: String,
     @SerializedName("role") val userRole: String,
-    @SerializedName("position_id") val userPositionId: Int?,
     @SerializedName("facility_id") val userFacilityId: Int,
     @SerializedName("is_receive_email_notif") val userIsReceiveEmailNotification: Int,
     @SerializedName("is_receive_sms_notif") val userIsReceiveSmsNotification: Int,

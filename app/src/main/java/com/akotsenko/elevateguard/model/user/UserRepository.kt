@@ -2,6 +2,7 @@ package com.akotsenko.elevateguard.model.user
 
 import com.akotsenko.elevateguard.model.*
 import com.akotsenko.elevateguard.model.settings.AppSettings
+import com.akotsenko.elevateguard.model.user.entities.FacilityOfUser
 import com.akotsenko.elevateguard.model.user.entities.User
 import com.akotsenko.elevateguard.model.wrapBackendExceptions
 
@@ -50,5 +51,9 @@ class UserRepository(private val userSource: UserSource, private val appSettings
         wrapBackendExceptions {
             updateUser(appSettings.getSettingsUserDataState().userId.toString(), user, password)
         }
+    }
+
+    suspend fun getFacilitiesOfUser(): List<FacilityOfUser> = wrapBackendExceptions {
+        return userSource.getFacilitiesOfUser(appSettings.getSettingsUserDataState().token)
     }
 }

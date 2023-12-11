@@ -26,14 +26,8 @@ class SignInViewModel(private val authRepository: AuthRepository = Singletons.au
     private val _showAuthErrorToastEvent = MutableLiveEvent<String>()
     val showAuthToastEvent = _showAuthErrorToastEvent.share()
 
-    private val _navigateToUserTabsEvent = MutableUnitLiveEvent()
-    val navigateToUserTabsEvent = _navigateToUserTabsEvent
-
-    private val _navigateToManagerTabsEvent = MutableUnitLiveEvent()
-    val navigateToManagerTabsEvent = _navigateToManagerTabsEvent
-
-    private val _navigateToEnterCompanyEvent = MutableUnitLiveEvent()
-    val navigateToEnterCompanyEvent = _navigateToEnterCompanyEvent
+    private val _navigateToSelectFacilityEvent = MutableUnitLiveEvent()
+    val navigateToSelectFacilityEvent = _navigateToSelectFacilityEvent
 
     fun login(loginData: Credential) {
         viewModelScope.launch {
@@ -41,13 +35,7 @@ class SignInViewModel(private val authRepository: AuthRepository = Singletons.au
             try {
                 val account = authRepository.login(loginData)
 
-                if (account.role == USER_ROLE) {
-                    launchUserTabsScreen()
-                } else if (account.role == MANAGER_ROLE && account.facilityId == 0) {
-                    launchEnterCompanyScreen()
-                } else {
-                    launchManagerTabsScreen()
-                }
+                launchSelectFacilityScreen()
             } catch (e: SignInValidateException) {
                 processSignInValidateException(e)
             } catch (e: EmptyFieldException){
@@ -82,11 +70,7 @@ class SignInViewModel(private val authRepository: AuthRepository = Singletons.au
 
     private fun showAuthErrorToast(message: String) = _showAuthErrorToastEvent.publishEvent(message)
 
-    private fun launchUserTabsScreen() = _navigateToUserTabsEvent.publishEvent()
-
-    private fun launchManagerTabsScreen() = _navigateToManagerTabsEvent.publishEvent()
-
-    private fun launchEnterCompanyScreen() = _navigateToEnterCompanyEvent.publishEvent()
+    private fun launchSelectFacilityScreen() = _navigateToSelectFacilityEvent.publishEvent()
 
     data class State(
         val emptyEmailError: Boolean = false,

@@ -1,9 +1,9 @@
 package com.akotsenko.elevateguard.sources.user
 
+import com.akotsenko.elevateguard.sources.user.entities.GetFacilitiesOfUserResponseEntity
 import com.akotsenko.elevateguard.sources.user.entities.GetUserResponseEntity
 import com.akotsenko.elevateguard.sources.user.entities.UpdateUserRequestEntity
 import com.akotsenko.elevateguard.sources.user.entities.UpdateUserResponseEntity
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -21,4 +21,7 @@ interface UserApi {
 
     @DELETE("users/{userId}")
     suspend fun deleteUser(@Header("Authorization") authToken: String, @Path("userId") userId: String): Response<Void>
+
+    @GET("users/facilities")
+    suspend fun getFacilitiesOfUser(@Header("Authorization") authToken: String): List<GetFacilitiesOfUserResponseEntity>
 }

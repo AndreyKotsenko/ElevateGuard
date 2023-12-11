@@ -9,7 +9,15 @@ interface AppSettings {
 
     fun getIsSignedInState(): Boolean
 
+    fun saveCurrentFacilityId(facilityId: Int)
+
+    fun getCurrentFacilityId(): Int
+
     fun saveSettingsUserDataState(settingsUserData: SettingsUserData)
 
     fun getSettingsUserDataState(): SettingsUserData
+
+    fun saveFacilityName(name: String)
+
+    fun getFacilityName(): String?
 }

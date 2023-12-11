@@ -9,6 +9,7 @@ import com.akotsenko.elevateguard.model.Field
 import com.akotsenko.elevateguard.model.construction.ConstructionRepository
 import com.akotsenko.elevateguard.model.construction.entities.Construction
 import com.akotsenko.elevateguard.model.facility.FacilityRepository
+import com.akotsenko.elevateguard.model.settings.AppSettingsRepository
 import com.akotsenko.elevateguard.screens.base.BaseViewModel
 import com.akotsenko.elevateguard.utils.requireValue
 import kotlinx.coroutines.launch
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class ManagerConstructionsViewModel(
     private val constructionRepository: ConstructionRepository = Singletons.constructionRepository,
-    private val facilityRepository: FacilityRepository = Singletons.facilityRepository
+    private val facilityRepository: FacilityRepository = Singletons.facilityRepository,
+    private val appSettingsRepository: AppSettingsRepository = Singletons.appSettingsRepository
 ) : BaseViewModel() {
 
     private val _state = MutableLiveData(State())
@@ -39,6 +41,8 @@ class ManagerConstructionsViewModel(
 
         }
     }
+
+    fun getUserRole(): String = appSettingsRepository.getSettingsUserDataState().role
 
     fun updateConstruction(name: String, constructionId: String) {
         viewModelScope.launch {

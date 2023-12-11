@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.akotsenko.elevateguard.Singletons
+import com.akotsenko.elevateguard.model.AuthException
 import com.akotsenko.elevateguard.model.auth.AuthRepository
 import com.akotsenko.elevateguard.model.auth.entities.RegisterData
 import com.akotsenko.elevateguard.model.facility.FacilityRepository
@@ -27,8 +28,13 @@ class ManagerUsersViewModel(
     fun getUsers() {
         viewModelScope.launch {
             showProgress()
-            _users.value = facilityRepository.getUsersByFacility()
-            hideProgress()
+            try {
+                _users.value = facilityRepository.getUsersByFacility()
+            } catch (e: AuthException) {
+                launchSignInScreen()
+            } finally {
+                hideProgress()
+            }
         }
     }
 
@@ -39,9 +45,15 @@ class ManagerUsersViewModel(
     ) {
         viewModelScope.launch {
             showProgress()
-            userRepository.updateUser(userId, user, password)
-            _users.value = facilityRepository.getUsersByFacility()
-            hideProgress()
+            try {
+                userRepository.updateUser(userId, user, password)
+                _users.value = facilityRepository.getUsersByFacility()
+            } catch (e: AuthException) {
+                launchSignInScreen()
+            } finally {
+                hideProgress()
+            }
+
         }
 
     }
@@ -49,18 +61,28 @@ class ManagerUsersViewModel(
     fun createUser(registerData: RegisterData) {
         viewModelScope.launch {
             showProgress()
-            authRepository.register(registerData)
-            _users.value = facilityRepository.getUsersByFacility()
-            hideProgress()
+            try {
+                authRepository.register(registerData)
+                _users.value = facilityRepository.getUsersByFacility()
+            } catch (e: AuthException) {
+                launchSignInScreen()
+            } finally {
+                hideProgress()
+            }
         }
     }
 
     fun deleteUser(userId: String) {
         viewModelScope.launch {
             showProgress()
-            userRepository.deleteUser(userId)
-            _users.value = facilityRepository.getUsersByFacility()
-            hideProgress()
+            try {
+                userRepository.deleteUser(userId)
+                _users.value = facilityRepository.getUsersByFacility()
+            } catch (e: AuthException) {
+                launchSignInScreen()
+            } finally {
+                hideProgress()
+            }
         }
     }
 

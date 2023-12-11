@@ -7,7 +7,6 @@ import com.akotsenko.elevateguard.model.auth.entities.RegisterData
 import com.akotsenko.elevateguard.sources.auth.entities.LoginRequestEntity
 import com.akotsenko.elevateguard.sources.auth.entities.RegisterRequestEntity
 import com.akotsenko.elevateguard.sources.base.BaseRetrofitSource
-import retrofit2.Call
 
 class RetrofitAuthSource: BaseRetrofitSource(), AuthSource {
 
@@ -19,9 +18,7 @@ class RetrofitAuthSource: BaseRetrofitSource(), AuthSource {
             password = loginData.password
         )
 
-        println("GEY = " + loginRequestData.email)
         val result = authApi.login(loginRequestData).toAccount()
-        println("MUST CHLEN = " + result.toString())
         result
     }
 
@@ -40,7 +37,6 @@ class RetrofitAuthSource: BaseRetrofitSource(), AuthSource {
             userPassword = registerData.userPassword,
             userMobile = registerData.userMobile,
             userRole = registerData.userRole,
-            userPositionId = registerData.userPositionId,
             userFacilityId = registerData.userFacilityId,
             userIsReceiveSmsNotification = registerData.userIsReceiveSmsNotification,
             userIsReceivePushNotification = registerData.userIsReceivePushNotification,

@@ -27,6 +27,10 @@ class UserValidateException(
     override val message: String
 ): AppException(message = message)
 
+class FacilityAlreadyExistException(
+    override val message: String
+): AppException(message = message)
+
 class ConnectionException(cause: Throwable) : AppException(cause = cause)
 
 open class BackendException(

@@ -9,7 +9,7 @@ interface FacilitySource {
 
     suspend fun createFacility(authToken: String, name: String): Int
 
-    suspend fun updateFacility(authToken: String, facilityId: String, facility: Facility): String
+    suspend fun updateFacility(authToken: String, facilityId: String, facilityName: String): String
 
     suspend fun getUsersByFacility(authToken: String, facilityId: String): List<User>
 

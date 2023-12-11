@@ -11,7 +11,7 @@ data class GetAccidentByIdResponseEntity(
     @SerializedName("facility_name") val facilityName: String,
     @SerializedName("construction_id") val constructionId: Int,
     @SerializedName("construction_name") val constructionName: String,
-    @SerializedName("notified_users") val notified_users: List<GetUserResponseEntity>
+    @SerializedName("notified_users") val notified_users: List<NotifiedUserResponseEntity>
 ) {
     fun toAccident(): Accident {
         return Accident(

@@ -14,7 +14,7 @@ class AccidentRepository(
     }
 
     suspend fun getAccidentsByFacility(): List<Accident> = wrapBackendExceptions {
-        return accidentSource.getAccidentsByFacility(appSettings.getSettingsUserDataState().token, appSettings.getSettingsUserDataState().facilityId)
+        return accidentSource.getAccidentsByFacility(appSettings.getSettingsUserDataState().token, appSettings.getCurrentFacilityId())
     }
 
     suspend fun createAccident(constructionId: Int) {

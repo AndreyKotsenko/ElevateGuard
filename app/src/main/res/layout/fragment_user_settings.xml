@@ -21,6 +21,49 @@
         app:layout_constraintGuide_end="24dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/companySettingsContainer"
+        style="@style/Form"
+        app:layout_constraintStart_toStartOf="@id/beginGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/aboutContainer">
+
+        <TextView
+            android:id="@+id/companyTitleTextView"
+            style="@style/FormHintTextView"
+            android:text="@string/company_info"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/companyNameHintTextView"
+            style="@style/HintTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/user_first_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/companyTitleTextView" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/companyBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="companyNameHintTextView"/>
+
+        <EditText
+            android:id="@+id/companyNameEditText"
+            style="@style/HintTextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            app:layout_constraintStart_toStartOf="@id/companyBarrier"
+            app:layout_constraintBaseline_toBaselineOf="@id/companyNameHintTextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/aboutContainer"
         style="@style/Form"
         app:layout_constraintStart_toStartOf="@id/beginGuideline"
@@ -171,6 +214,17 @@
             app:layout_constraintTop_toBottomOf="@id/emailNotificationCheckBox"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/aboutContainer"
+        app:layout_constraintBottom_toTopOf="@id/logoutButton"/>
+
 
     <Button
         android:id="@+id/logoutButton"

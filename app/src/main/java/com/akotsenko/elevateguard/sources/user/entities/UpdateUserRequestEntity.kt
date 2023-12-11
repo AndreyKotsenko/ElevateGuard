@@ -7,8 +7,6 @@ data class UpdateUserRequestEntity(
     @SerializedName("last_name") val userLastName: String? = null,
     @SerializedName("email") val userEmail: String? = null,
     @SerializedName("password") val userPassword: String? = null,
-    @SerializedName("position_id") val userPositionId: Int? = null,
-    @SerializedName("facility_id") val userFacilityId: Int? = null,
     @SerializedName("mobile") val userMobile: String? = null,
     @SerializedName("role") val userRole: String? = null,
     @SerializedName("is_receive_email_notif") val userIsReceiveEmailNotification: Int? = null,

@@ -17,7 +17,7 @@ class UserCompanyInfoViewModel(private val facilityRepository: FacilityRepositor
     private val _constructions = MutableLiveData<List<Construction>>()
     val constructions = _constructions
 
-    private val _state = MutableLiveData(SignInViewModel.State())
+    private val _state = MutableLiveData(State())
     val state = _state
 
     fun getConstructionsOfFacility() {
@@ -33,7 +33,7 @@ class UserCompanyInfoViewModel(private val facilityRepository: FacilityRepositor
     }
 
     private fun showProgress() {
-        _state.value = SignInViewModel.State(signInInProgress = true)
+        _state.value = State(signInInProgress = true)
     }
 
     private fun hideProgress() {

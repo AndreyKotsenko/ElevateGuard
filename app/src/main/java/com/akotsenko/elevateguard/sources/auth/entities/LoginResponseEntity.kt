@@ -14,7 +14,6 @@ data class LoginResponseEntity(
             lastName = userAuthEntity.lastName,
             id = userAuthEntity.id,
             positionId = userAuthEntity.positionId,
-            facilityId = userAuthEntity.facilityId,
             email = userAuthEntity.email,
             mobile = userAuthEntity.mobile,
             role = userAuthEntity.role,

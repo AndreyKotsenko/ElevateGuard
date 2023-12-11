@@ -13,7 +13,7 @@ class UserConstructionsAdapter(private val context: Context, private var constru
     RecyclerView.Adapter<UserConstructionsAdapter.ViewHolder>(){
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val constructionsNameTextView: TextView = itemView.findViewById(R.id.constructionsNameTextView) // Замените на ваш идентификатор TextView
+        val constructionsNameTextView: TextView = itemView.findViewById(R.id.constructionsNameTextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
