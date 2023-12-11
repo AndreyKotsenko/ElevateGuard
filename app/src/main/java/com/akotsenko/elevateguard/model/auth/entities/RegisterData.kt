@@ -7,7 +7,6 @@ data class RegisterData(
     val userPassword: String,
     val userMobile: String,
     val userRole: String,
-    val userPositionId: Int?,
     val userFacilityId: Int,
     val userIsReceiveEmailNotification: Int,
     val userIsReceiveSmsNotification: Int,

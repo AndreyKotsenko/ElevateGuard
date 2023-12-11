@@ -25,10 +25,10 @@ class RetrofitFacilitySource : BaseRetrofitSource(), FacilitySource {
     override suspend fun updateFacility(
         authToken: String,
         facilityId: String,
-        facility: Facility
+        facilityName: String
     ): String = wrapRetrofitExceptions{
         val updateFacilityRequestEntity = UpdateFacilityRequestEntity(
-            name = facility.name
+            name = facilityName
         )
         facilityApi.updateFacility(BEARER_TOKEN + authToken, facilityId, updateFacilityRequestEntity)
     }

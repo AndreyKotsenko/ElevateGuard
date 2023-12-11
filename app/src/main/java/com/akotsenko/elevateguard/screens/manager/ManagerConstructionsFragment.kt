@@ -12,6 +12,7 @@ import com.akotsenko.elevateguard.R
 import com.akotsenko.elevateguard.databinding.DialogAddConstructionBinding
 import com.akotsenko.elevateguard.databinding.DialogEditConstructionBinding
 import com.akotsenko.elevateguard.databinding.FragmentManagerConstructionsBinding
+import com.akotsenko.elevateguard.databinding.ItemManagerConstructionsLayoutBinding
 import com.akotsenko.elevateguard.model.construction.entities.Construction
 import com.akotsenko.elevateguard.screens.adapters.ManagerConstructionAdapter
 import com.akotsenko.elevateguard.utils.observeToSignInScreen
@@ -32,11 +33,19 @@ class ManagerConstructionsFragment: Fragment(R.layout.fragment_manager_construct
     ): View? {
         binding = FragmentManagerConstructionsBinding.inflate(inflater, container, false)
 
-        adapter = ManagerConstructionAdapter(emptyList()) {
+        viewModel = ViewModelProvider(this).get(ManagerConstructionsViewModel::class.java)
+
+        val userRole = viewModel.getUserRole()
+
+        adapter = ManagerConstructionAdapter(emptyList(), userRole) {
             deleteCharacter(it)
         }
 
-        viewModel = ViewModelProvider(this).get(ManagerConstructionsViewModel::class.java)
+        if (userRole == ADMIN_ROLE) {
+            binding.addButon.visibility = View.VISIBLE
+        } else {
+            binding.addButon.visibility = View.GONE
+        }
 
         observeState()
         observeConstructions()
@@ -47,7 +56,9 @@ class ManagerConstructionsFragment: Fragment(R.layout.fragment_manager_construct
         binding.addButon.setOnClickListener { onAddPressed() }
 
         binding.constructionsList.setOnItemClickListener { parent, view, position, id ->
-            editConstructionInfo(adapter.getItem(position))
+            if(userRole == ADMIN_ROLE){
+                editConstructionInfo(adapter.getItem(position))
+            }
         }
 
         return binding.root
@@ -129,5 +140,9 @@ class ManagerConstructionsFragment: Fragment(R.layout.fragment_manager_construct
 
     private fun observeConstructions() = viewModel.constructions.observe(viewLifecycleOwner) {
         adapter.setList(it)
+    }
+
+    companion object {
+        private const val  ADMIN_ROLE = "ADMIN"
     }
 }

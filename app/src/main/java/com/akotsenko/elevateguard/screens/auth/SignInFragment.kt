@@ -13,7 +13,7 @@ import com.akotsenko.elevateguard.databinding.FragmentSignInBinding
 import com.akotsenko.elevateguard.model.auth.entities.Credential
 import com.akotsenko.elevateguard.utils.observeEvent
 
-class SignInFragment: Fragment(R.layout.fragment_sign_in) {
+class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
     private lateinit var binding: FragmentSignInBinding
     private lateinit var viewModel: SignInViewModel
@@ -28,12 +28,14 @@ class SignInFragment: Fragment(R.layout.fragment_sign_in) {
         viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
 
         binding.signInButton.setOnClickListener {
-            onSignInButtonPressed(binding.emailEditText.text.toString(), binding.passwordEditText.text.toString())
+            onSignInButtonPressed(
+                binding.emailEditText.text.toString(),
+                binding.passwordEditText.text.toString()
+            )
         }
 
         observeState()
-        observeNavigateToUserTabsEvent()
-        observeNavigateToManagerTabsEvent()
+        observeNavigateToSelectFacilityEvent()
         observeShowAuthErrorMessageEvent()
         observeClearAllFieldsEvent()
 
@@ -41,36 +43,37 @@ class SignInFragment: Fragment(R.layout.fragment_sign_in) {
     }
 
     private fun onSignInButtonPressed(email: String, password: String) {
-        viewModel.login(Credential(
-            email = email,
-            password = password
-        ))
+        viewModel.login(
+            Credential(
+                email = email,
+                password = password
+            )
+        )
     }
 
     private fun observeState() = viewModel.state.observe(viewLifecycleOwner) {
-        binding.emailEditText.error = if (it.emptyEmailError) getString(R.string.field_is_empty) else null
-        binding.passwordEditText.error = if (it.emptyPasswordError) getString(R.string.field_is_empty) else null
+        binding.emailEditText.error =
+            if (it.emptyEmailError) getString(R.string.field_is_empty) else null
+        binding.passwordEditText.error =
+            if (it.emptyPasswordError) getString(R.string.field_is_empty) else null
 
         binding.progressBar.visibility = if (it.showProgress) View.VISIBLE else View.INVISIBLE
     }
 
-    private fun observeShowAuthErrorMessageEvent() = viewModel.showAuthToastEvent.observeEvent(viewLifecycleOwner) {
-        Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-    }
+    private fun observeShowAuthErrorMessageEvent() =
+        viewModel.showAuthToastEvent.observeEvent(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
 
-    private fun observeClearAllFieldsEvent() = viewModel.clearAllFieldsEvent.observeEvent(viewLifecycleOwner) {
-        binding.emailEditText.text?.clear()
-        binding.passwordEditText.text?.clear()
-    }
+    private fun observeClearAllFieldsEvent() =
+        viewModel.clearAllFieldsEvent.observeEvent(viewLifecycleOwner) {
+            binding.emailEditText.text?.clear()
+            binding.passwordEditText.text?.clear()
+        }
 
-    private fun observeNavigateToUserTabsEvent() = viewModel.navigateToUserTabsEvent.observeEvent(viewLifecycleOwner) {
-        findNavController().navigate(R.id.action_signInFragment_to_userTabsFragment)
-    }
-
-    private fun observeNavigateToManagerTabsEvent() = viewModel.navigateToManagerTabsEvent.observeEvent(viewLifecycleOwner) {
-        findNavController().navigate(R.id.action_signInFragment_to_managerTabsFragment)
-    }
-
-
+    private fun observeNavigateToSelectFacilityEvent() =
+        viewModel.navigateToSelectFacilityEvent.observeEvent(viewLifecycleOwner) {
+            findNavController().navigate(R.id.action_signInFragment_to_selectFacilityFragment)
+        }
 
 }

@@ -30,6 +30,13 @@
     <string name="save_btn">Save</string>
     <string name="field_is_empty">Field is empty</string>
     <string name="edit_btn">Edit</string>
+    <string name="add_facility">Add facility</string>
+    <string name="create_facility">Create facility</string>
+    <string name="facility_name">Facility name</string>
+    <string name="create_manager">Create manager</string>
+    <string name="create">Create</string>
+    <string name="personal_info">Personal info</string>
+    <string name="save_personal_info">Save personal info</string>
 
     <string-array name="role_options">
         <item>USER</item>

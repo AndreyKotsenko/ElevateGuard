@@ -27,7 +27,10 @@ class UserSettingsFragment: Fragment(R.layout.fragment_user_settings) {
 
         observeToSignInScreen(viewModel.navigateToSignInEvent)
         observeUser()
+        observeState()
         viewModel.getUser()
+        viewModel.getCurrentFacility()
+        observeFacility()
 
         binding.saveButton.setOnClickListener {
             val user = toUser()
@@ -54,6 +57,10 @@ class UserSettingsFragment: Fragment(R.layout.fragment_user_settings) {
         )
     }
 
+    private fun setFacilityInfo(facilityName: String) {
+        binding.companyNameEditText.setText(facilityName)
+    }
+
     private fun setUserInfo(user: User){
         with(binding){
             firstNameEditText.setText(user.firstName)
@@ -68,6 +75,14 @@ class UserSettingsFragment: Fragment(R.layout.fragment_user_settings) {
 
     private fun observeUser() = viewModel.user.observe(viewLifecycleOwner) {
         setUserInfo(it)
+    }
+
+    private fun observeFacility() = viewModel.facilityName.observe(viewLifecycleOwner) {
+        setFacilityInfo(it)
+    }
+
+    private fun observeState() = viewModel.state.observe(viewLifecycleOwner) {
+        binding.progressBar.visibility = if (it.showProgress) View.VISIBLE else View.INVISIBLE
     }
 
 }

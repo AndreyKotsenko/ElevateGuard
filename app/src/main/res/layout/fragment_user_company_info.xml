@@ -6,30 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".screens.user.UserCompanyInfoFragment">
 
-    <LinearLayout
-        android:id="@+id/companyNameLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/companyNameHintTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="COMPANY NAME:"/>
-
-        <TextView
-            android:id="@+id/companyNameTextView"
-            android:layout_width="match_parent"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"/>
-    </LinearLayout>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/constructionList"
@@ -37,7 +13,7 @@
         android:layout_height="0dp"
         tools:listitem="@layout/item_layout"
         app:layout_constrainedHeight="true"
-        app:layout_constraintTop_toBottomOf="@id/companyNameLinearLayout"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

@@ -11,11 +11,11 @@
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" >
         <action
-            android:id="@+id/action_signInFragment_to_userTabsFragment"
-            app:destination="@id/userTabsFragment" />
-        <action
-            android:id="@+id/action_signInFragment_to_managerTabsFragment"
-            app:destination="@id/managerTabsFragment" />
+            android:id="@+id/action_signInFragment_to_selectFacilityFragment"
+            app:destination="@id/selectFacilityFragment" />
+        <argument
+            android:name="Role"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/userTabsFragment"
@@ -27,4 +27,28 @@
         android:name="com.akotsenko.elevateguard.screens.manager.ManagerTabsFragment"
         android:label="fragment_manager_tabs"
         tools:layout="@layout/fragment_manager_tabs" />
+    <fragment
+        android:id="@+id/selectFacilityFragment"
+        android:name="com.akotsenko.elevateguard.screens.auth.SelectFacilityFragment"
+        android:label="fragment_select_facility"
+        tools:layout="@layout/fragment_select_facility" >
+        <action
+            android:id="@+id/action_selectFacilityFragment_to_createFacilityFragment"
+            app:destination="@id/createFacilityFragment" />
+        <action
+            android:id="@+id/action_selectFacilityFragment_to_userTabsFragment"
+            app:destination="@id/userTabsFragment" />
+        <action
+            android:id="@+id/action_selectFacilityFragment_to_managerTabsFragment"
+            app:destination="@id/managerTabsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createFacilityFragment"
+        android:name="com.akotsenko.elevateguard.screens.admin.CreateFacilityFragment"
+        android:label="fragment_create_facility_manager"
+        tools:layout="@layout/fragment_create_facility_manager" >
+        <action
+            android:id="@+id/action_createFacilityFragment_to_managerTabsFragment"
+            app:destination="@id/managerTabsFragment" />
+    </fragment>
 </navigation>

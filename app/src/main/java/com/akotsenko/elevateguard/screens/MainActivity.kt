@@ -1,6 +1,5 @@
 package com.akotsenko.elevateguard.screens
 
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -15,7 +14,6 @@ import com.akotsenko.elevateguard.R
 import com.akotsenko.elevateguard.Singletons
 import com.akotsenko.elevateguard.databinding.ActivityMainBinding
 import com.akotsenko.elevateguard.screens.user.UserTabsFragment
-import java.util.regex.Pattern
 
 class MainActivity : AppCompatActivity() {
 
@@ -76,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         graph.setStartDestination(
             if (isSignedIn) {
                 val settingsUserData = viewModel.getSettingsUserDataState()
-                if(settingsUserData.role != "MANAGER") {
+                if(settingsUserData.role != "MANAGER" && settingsUserData.role != "ADMIN") {
                     getUserTabsDestination()
                 } else {
                     getManagerTabsDestination()
@@ -96,31 +94,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val destinationListener = NavController.OnDestinationChangedListener { _, destination, arguments ->
-        supportActionBar?.title = prepareTitle(destination.label, arguments)
+        supportActionBar?.title = viewModel.getFacilityName()
         supportActionBar?.setDisplayHomeAsUpEnabled(!isStartDestination(destination))
-    }
-
-    private fun prepareTitle(label: CharSequence?, arguments: Bundle?): String {
-
-        // code for this method has been copied from Google sources :)
-
-        if (label == null) return ""
-        val title = StringBuffer()
-        val fillInPattern = Pattern.compile("\\{(.+?)\\}")
-        val matcher = fillInPattern.matcher(label)
-        while (matcher.find()) {
-            val argName = matcher.group(1)
-            if (arguments != null && arguments.containsKey(argName)) {
-                matcher.appendReplacement(title, "")
-                title.append(arguments[argName].toString())
-            } else {
-                throw IllegalArgumentException(
-                    "Could not find $argName in $arguments to fill label $label"
-                )
-            }
-        }
-        matcher.appendTail(title)
-        return title.toString()
     }
 
     private fun isStartDestination(destination: NavDestination?): Boolean {

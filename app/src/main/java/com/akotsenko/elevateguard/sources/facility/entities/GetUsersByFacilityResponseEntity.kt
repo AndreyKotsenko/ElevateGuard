@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 data class GetUsersByFacilityResponseEntity(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
-    val users: List<GetUserResponseEntity>
+    val users: List<UserResponseEntity>
 ) {
     fun toUsers(): List<User> {
         return users.map {

@@ -8,12 +8,7 @@ import android.widget.BaseAdapter
 import com.akotsenko.elevateguard.databinding.ItemManagerUsersLayoutBinding
 import com.akotsenko.elevateguard.model.user.entities.User
 
-typealias OnDeletePressedListenerUsers = (User) -> Unit
-
-class UsersAdapter(
-    private var users: List<User>,
-    private val OnDeletePressedListener: OnDeletePressedListenerUsers
-): BaseAdapter(), View.OnClickListener {
+class UserUsersAdapter(private var users: List<User>): BaseAdapter() {
     override fun getCount(): Int {
         return users.size
     }
@@ -35,22 +30,15 @@ class UsersAdapter(
 
         binding.firstNameTextView.text = user.firstName
         binding.lastNameTextView.text = user.lastName
-        binding.deleteImageView.visibility = if (user.role == "USER") View.VISIBLE else View.GONE
-        binding.deleteImageView.tag = user
+        binding.deleteImageView.visibility = View.GONE
 
         return binding.root
     }
 
     private fun createBinding(context: Context): ItemManagerUsersLayoutBinding {
         val binding = ItemManagerUsersLayoutBinding.inflate(LayoutInflater.from(context))
-        binding.deleteImageView.setOnClickListener(this)
         binding.root.tag = binding
         return binding
-    }
-
-    override fun onClick(v: View) {
-        val user = v.tag as User
-        OnDeletePressedListener.invoke(user)
     }
 
     fun setList(users: List<User>) {

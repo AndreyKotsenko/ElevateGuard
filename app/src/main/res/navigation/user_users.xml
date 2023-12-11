@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_users"
+    app:startDestination="@id/userUsersFragment">
+
+    <fragment
+        android:id="@+id/userUsersFragment"
+        android:name="com.akotsenko.elevateguard.screens.user.UserUsersFragment"
+        android:label="UserUsersFragment" />
+</navigation>

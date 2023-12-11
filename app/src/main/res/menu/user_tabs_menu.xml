@@ -2,8 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@id/user_company_info"
-        android:title="@string/info"
-        android:icon="@drawable/ic_info"/>
+        android:title="@string/users"
+        android:icon="@drawable/ic_users" />
+    <item android:id="@id/user_company_info"
+        android:title="@string/constructions"
+        android:icon="@drawable/ic_construction"/>
     <item android:id="@id/user_settings"
         android:title="@string/settings"
         android:icon="@drawable/ic_manage_accounts" />

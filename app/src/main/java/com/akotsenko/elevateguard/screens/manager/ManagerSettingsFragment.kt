@@ -11,6 +11,7 @@ import androidx.navigation.navOptions
 import com.akotsenko.elevateguard.Const
 import com.akotsenko.elevateguard.R
 import com.akotsenko.elevateguard.databinding.FragmentManagerSettingsBinding
+import com.akotsenko.elevateguard.model.settings.entities.SettingsUserData
 import com.akotsenko.elevateguard.model.user.entities.User
 import com.akotsenko.elevateguard.utils.findTopNavController
 import com.akotsenko.elevateguard.sources.user.entities.GetUserResponseEntity
@@ -30,14 +31,35 @@ class ManagerSettingsFragment: Fragment(R.layout.fragment_manager_settings) {
 
         viewModel = ViewModelProvider(this).get(ManagerSettingsViewModel::class.java)
 
+        val userRole = viewModel.getUserRole()
+
+        if (userRole == ADMIN_ROLE) {
+            binding.companySaveButton.visibility = View.VISIBLE
+            binding.companyNameEditText.isFocusable = true
+        } else {
+            binding.companySaveButton.visibility = View.GONE
+            binding.companyNameEditText.isFocusable = false
+        }
+
+        binding.companySaveButton.setOnClickListener {
+            viewModel.updateFacility(binding.companyNameEditText.text.toString())
+        }
+
+        binding.saveButton.setOnClickListener {
+            viewModel.updateUser(getPersonalInfo(), null)
+        }
+
         binding.logoutButton.setOnClickListener {
             viewModel.logout()
         }
 
         observeToSignInScreen()
+        observeState()
+        observeFacility()
         observeUser()
 
         viewModel.getCurrentUser()
+        viewModel.getCurrentFacility()
 
         return binding.root
     }
@@ -54,7 +76,15 @@ class ManagerSettingsFragment: Fragment(R.layout.fragment_manager_settings) {
         setUserInfo(it)
     }
 
-    private fun setUserInfo(user: User){
+    private fun observeFacility() = viewModel.facilityName.observe(viewLifecycleOwner) {
+        setFacilityInfo(it)
+    }
+
+    private fun setFacilityInfo(facilityName: String) {
+        binding.companyNameEditText.setText(facilityName)
+    }
+
+    private fun setUserInfo(user: SettingsUserData){
         with(binding){
             firstNameEditText.setText(user.firstName)
             lastNameEditText.setText(user.lastName)
@@ -64,5 +94,27 @@ class ManagerSettingsFragment: Fragment(R.layout.fragment_manager_settings) {
             smsNotificationCheckBox.isChecked = user.isReceiveSmsNotification == 1
             emailNotificationCheckBox.isChecked = user.isReceiveEmailNotification == 1
         }
+    }
+
+    private fun getPersonalInfo(): User {
+        return with(binding) {
+            User(
+                firstName = firstNameEditText.text.toString(),
+                lastName = lastNameEditText.text.toString(),
+                email = emailEditText.text.toString(),
+                mobile = mobileEditText.text.toString(),
+                isReceivePushNotification = if(pushNotificationCheckBox.isChecked) 1 else 0,
+                isReceiveSmsNotification = if(smsNotificationCheckBox.isChecked) 1 else 0,
+                isReceiveEmailNotification = if(emailNotificationCheckBox.isChecked) 1 else 0
+            )
+        }
+    }
+
+    private fun observeState() = viewModel.state.observe(viewLifecycleOwner) {
+        binding.progressBar.visibility = if (it.showProgress) View.VISIBLE else View.INVISIBLE
+    }
+
+    companion object {
+        private const val ADMIN_ROLE = "ADMIN"
     }
 }

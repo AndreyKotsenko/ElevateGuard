@@ -15,13 +15,14 @@ import com.akotsenko.elevateguard.databinding.DialogShowInfoBinding
 import com.akotsenko.elevateguard.databinding.FragmentManagerUsersBinding
 import com.akotsenko.elevateguard.model.auth.entities.RegisterData
 import com.akotsenko.elevateguard.model.user.entities.User
-import com.akotsenko.elevateguard.screens.adapters.UsersAdapter
+import com.akotsenko.elevateguard.screens.adapters.ManagerUsersAdapter
+import com.akotsenko.elevateguard.utils.observeToSignInScreen
 
 class ManagerUsersFragment : Fragment(R.layout.fragment_manager_users) {
 
     private lateinit var binding: FragmentManagerUsersBinding
     private lateinit var viewModel: ManagerUsersViewModel
-    private lateinit var adapter: UsersAdapter
+    private lateinit var adapter: ManagerUsersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,22 +31,23 @@ class ManagerUsersFragment : Fragment(R.layout.fragment_manager_users) {
     ): View? {
         binding = FragmentManagerUsersBinding.inflate(inflater, container, false)
 
-        adapter = UsersAdapter(emptyList()) {
+        adapter = ManagerUsersAdapter(emptyList()) {
             deleteCharacter(it)
         }
 
         viewModel = ViewModelProvider(this).get(ManagerUsersViewModel::class.java)
 
+        observeToSignInScreen(viewModel.navigateToSignInEvent)
         observeState()
         observeUsers()
 
         viewModel.getUsers()
 
         binding.usersList.adapter = adapter
-        binding.addButon.setOnClickListener { onAddPressed() }
+        binding.addButton.setOnClickListener { onAddPressed() }
 
         binding.usersList.setOnItemClickListener { parent, view, position, id ->
-            if(adapter.getItem(position).role == "MANAGER"){
+            if(adapter.getItem(position).role == "MANAGER" || adapter.getItem(position).role == "ADMIN"){
                 showUserInfo(adapter.getItem(position))
             } else {
                 editUserInfo(adapter.getItem(position))
@@ -152,7 +154,6 @@ class ManagerUsersFragment : Fragment(R.layout.fragment_manager_users) {
                 userIsReceiveEmailNotification = if(emailNotificationCheckBox.isChecked) 1 else 0,
                 userIsReceiveSmsNotification = if(smsNotificationCheckBox.isChecked) 1 else 0,
                 userIsReceivePushNotification = if(pushNotificationCheckBox.isChecked) 1 else 0,
-                userPositionId = null,
                 userFacilityId = viewModel.getCurrentFacilityId().toInt()
             )
         }

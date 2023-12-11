@@ -23,4 +23,6 @@ class MainActivityViewModel(private val appSettingsRepository: AppSettingsReposi
     fun getSettingsUserDataState(): SettingsUserData {
         return appSettingsRepository.getSettingsUserDataState()
     }
+
+    fun getFacilityName(): String? = appSettingsRepository.getFacilityName()
 }

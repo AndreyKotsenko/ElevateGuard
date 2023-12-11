@@ -11,7 +11,7 @@ class ConstructionRepository(private val constructionSource: ConstructionSource,
     suspend fun createConstruction(construction: Construction): Construction = wrapBackendExceptions {
         if (construction.name?.isBlank() == true) throw EmptyFieldException(Field.ConstructionName)
 
-        construction.facilityId = appSettings.getSettingsUserDataState().facilityId
+        construction.facilityId = appSettings.getCurrentFacilityId()
         return constructionSource.createConstruction(appSettings.getSettingsUserDataState().token, construction)
     }
 

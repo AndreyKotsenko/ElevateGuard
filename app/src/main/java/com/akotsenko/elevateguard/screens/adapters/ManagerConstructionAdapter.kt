@@ -12,6 +12,7 @@ typealias OnDeletePressedListenerManager = (Construction) -> Unit
 
 class ManagerConstructionAdapter(
     private var constructions: List<Construction>,
+    private val userRole: String,
     private val OnDeletePressedListener: OnDeletePressedListenerManager
 ): BaseAdapter(), View.OnClickListener {
     override fun getCount(): Int {
@@ -41,6 +42,11 @@ class ManagerConstructionAdapter(
 
     private fun createBinding(context: Context): ItemManagerConstructionsLayoutBinding {
         val binding = ItemManagerConstructionsLayoutBinding.inflate(LayoutInflater.from(context))
+        if (userRole == ADMIN_ROLE) {
+            binding.deleteImageView.visibility = View.VISIBLE
+        } else {
+            binding.deleteImageView.visibility = View.GONE
+        }
         binding.deleteImageView.setOnClickListener(this)
         binding.root.tag = binding
         return binding
@@ -54,5 +60,9 @@ class ManagerConstructionAdapter(
     fun setList(constructions: List<Construction>) {
         this.constructions = constructions
         notifyDataSetChanged()
+    }
+
+    companion object {
+        private const val ADMIN_ROLE = "ADMIN"
     }
 }

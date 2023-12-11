@@ -12,8 +12,6 @@ data class RegisterResponseEntity(
     @SerializedName("is_receive_email_notif") val userIsReceiveEmailNotification: Int,
     @SerializedName("is_receive_sms_notif") val userIsReceiveSmsNotification: Int,
     @SerializedName("is_receive_push_notif") val userIsReceivePushNotification: Int,
-    @SerializedName("position_id") val userPositionId: Int?,
-    @SerializedName("facility_id") val userFacilityId: Int,
     @SerializedName("id") val userId: Int
 ) {
     fun toAccount(): Account {
@@ -21,8 +19,6 @@ data class RegisterResponseEntity(
             firstName = userFirstName,
             lastName = userLastName,
             id = userId,
-            positionId = userPositionId,
-            facilityId = userFacilityId,
             email = userEmail,
             mobile = userMobile,
             role = userRole,

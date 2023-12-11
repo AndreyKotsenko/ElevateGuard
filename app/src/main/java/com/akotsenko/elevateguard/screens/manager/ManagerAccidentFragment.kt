@@ -40,7 +40,6 @@ class ManagerAccidentFragment: Fragment(R.layout.fragment_manager_accident) {
         observeToSignInScreen(viewModel.navigateToSignInEvent)
 
         binding.accidentList.adapter = adapter
-        binding.addButon.setOnClickListener {onAddPressed()}
         viewModel.getConstructions()
 
 
@@ -52,32 +51,33 @@ class ManagerAccidentFragment: Fragment(R.layout.fragment_manager_accident) {
         viewModel.getAccidents()
     }
 
-    private fun onAddPressed() {
-        val dialogBinding = DialogAddAccidentBinding.inflate(layoutInflater)
-        val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Add construction")
-            .setView(dialogBinding.root)
-            .setPositiveButton("Add") {d, which ->
-                viewModel.createAccident(dialogBinding.constructionSpinner.selectedItem as Int)
-            }
-            .create()
-        dialog.show()
-
-        val keys = constructionNamesToId.keys.toList()
-
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, keys)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        dialogBinding.constructionSpinner.adapter = adapter
-
-        dialogBinding.constructionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: android.view.View?, position: Int, id: Long) {
-                val constructionId = constructionNamesToId[keys[position]]
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-            }
-        }
-    }
+    // we can use this method when we want add new accident
+//    private fun onAddPressed() {
+//        val dialogBinding = DialogAddAccidentBinding.inflate(layoutInflater)
+//        val dialog = AlertDialog.Builder(requireContext())
+//            .setTitle("Add construction")
+//            .setView(dialogBinding.root)
+//            .setPositiveButton("Add") {d, which ->
+//                viewModel.createAccident(dialogBinding.constructionSpinner.selectedItem as Int)
+//            }
+//            .create()
+//        dialog.show()
+//
+//        val keys = constructionNamesToId.keys.toList()
+//
+//        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, keys)
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        dialogBinding.constructionSpinner.adapter = adapter
+//
+//        dialogBinding.constructionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(parent: AdapterView<*>, view: android.view.View?, position: Int, id: Long) {
+//                val constructionId = constructionNamesToId[keys[position]]
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>) {
+//            }
+//        }
+//    }
 
     private fun observeState() = viewModel.state.observe(viewLifecycleOwner) {
         binding.progressBar.visibility = if (it.showProgress) View.VISIBLE else View.INVISIBLE
