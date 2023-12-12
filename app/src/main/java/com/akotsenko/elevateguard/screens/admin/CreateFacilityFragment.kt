@@ -34,7 +34,7 @@ class CreateFacilityFragment: Fragment(R.layout.fragment_create_facility_manager
         observeNavigateToAdminTabsEvent()
 
         binding.createButton.setOnClickListener {
-            viewModel.createFacilityAndManager(binding.companyNameEditText.toString(), toRegisterData())
+            viewModel.createFacilityAndManager(binding.companyNameEditText.text.toString(), toRegisterData())
         }
 
         return binding.root
@@ -62,11 +62,11 @@ class CreateFacilityFragment: Fragment(R.layout.fragment_create_facility_manager
     private fun toRegisterData(): RegisterData {
         val registerData = with(binding) {
             RegisterData(
-                userFirstName = firstNameEditText.toString(),
-                userLastName = lastNameEditText.toString(),
-                userEmail = emailEditText.toString(),
-                userMobile = mobileEditText.toString(),
-                userPassword = passwordEditText.toString(),
+                userFirstName = firstNameEditText.text.toString(),
+                userLastName = lastNameEditText.text.toString(),
+                userEmail = emailEditText.text.toString(),
+                userMobile = mobileEditText.text.toString(),
+                userPassword = passwordEditText.text.toString(),
                 userRole = "MANAGER",
                 userFacilityId = 0,
                 userIsReceiveEmailNotification = if(emailNotificationCheckBox.isChecked) 1 else 0,

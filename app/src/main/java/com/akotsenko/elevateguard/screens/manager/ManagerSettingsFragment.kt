@@ -53,6 +53,10 @@ class ManagerSettingsFragment: Fragment(R.layout.fragment_manager_settings) {
             viewModel.logout()
         }
 
+        binding.changeFacilityButton.setOnClickListener {
+            navigateToSelectFacility()
+        }
+
         observeToSignInScreen()
         observeState()
         observeFacility()
@@ -74,6 +78,14 @@ class ManagerSettingsFragment: Fragment(R.layout.fragment_manager_settings) {
 
     private fun observeUser() = viewModel.user.observe(viewLifecycleOwner) {
         setUserInfo(it)
+    }
+
+    private fun navigateToSelectFacility() {
+        findTopNavController().navigate(R.id.selectFacilityFragment, null, navOptions {
+            popUpTo(R.id.selectFacilityFragment) {
+                inclusive = true
+            }
+        })
     }
 
     private fun observeFacility() = viewModel.facilityName.observe(viewLifecycleOwner) {

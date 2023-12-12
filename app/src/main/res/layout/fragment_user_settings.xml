@@ -225,13 +225,22 @@
         app:layout_constraintTop_toBottomOf="@id/aboutContainer"
         app:layout_constraintBottom_toTopOf="@id/logoutButton"/>
 
+    <Button
+        android:id="@+id/changeFacilityButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_facility"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/logoutButton"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 
     <Button
         android:id="@+id/logoutButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/logout"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/changeFacilityButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

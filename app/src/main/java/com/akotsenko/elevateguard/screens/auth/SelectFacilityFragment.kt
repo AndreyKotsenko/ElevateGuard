@@ -54,6 +54,9 @@ class SelectFacilityFragment: Fragment(R.layout.fragment_select_facility) {
         }
 
         binding.addFacility.visibility = if(role == "ADMIN") View.VISIBLE else View.GONE
+        binding.addFacility.setOnClickListener {
+            findNavController().navigate(R.id.action_selectFacilityFragment_to_createFacilityFragment)
+        }
 
         return binding.root
     }
