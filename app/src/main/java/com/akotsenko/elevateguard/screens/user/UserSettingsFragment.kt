@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.navOptions
 import com.akotsenko.elevateguard.R
 import com.akotsenko.elevateguard.databinding.FragmentUserSettingsBinding
 import com.akotsenko.elevateguard.model.user.entities.User
+import com.akotsenko.elevateguard.utils.findTopNavController
 import com.akotsenko.elevateguard.utils.observeToSignInScreen
 
 class UserSettingsFragment: Fragment(R.layout.fragment_user_settings) {
@@ -42,6 +44,10 @@ class UserSettingsFragment: Fragment(R.layout.fragment_user_settings) {
             viewModel.logout()
         }
 
+        binding.changeFacilityButton.setOnClickListener {
+            navigateToSelectFacility()
+        }
+
         return binding.root
     }
 
@@ -55,6 +61,14 @@ class UserSettingsFragment: Fragment(R.layout.fragment_user_settings) {
             isReceiveSmsNotification = if (binding.smsNotificationCheckBox.isChecked) 1 else 0,
             isReceiveEmailNotification = if (binding.emailNotificationCheckBox.isChecked) 1 else 0
         )
+    }
+
+    private fun navigateToSelectFacility() {
+        findTopNavController().navigate(R.id.selectFacilityFragment, null, navOptions {
+            popUpTo(R.id.selectFacilityFragment) {
+                inclusive = true
+            }
+        })
     }
 
     private fun setFacilityInfo(facilityName: String) {

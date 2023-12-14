@@ -37,6 +37,7 @@
     <string name="create">Create</string>
     <string name="personal_info">Personal info</string>
     <string name="save_personal_info">Save personal info</string>
+    <string name="change_facility">Change Facility</string>
 
     <string-array name="role_options">
         <item>USER</item>

@@ -58,7 +58,7 @@
             style="@style/HintTextView.Value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintWidth_percent="0.7"
             app:layout_constraintStart_toStartOf="@id/companyBarrier"
             app:layout_constraintBaseline_toBaselineOf="@id/companyNameHintTextView" />
 
@@ -166,7 +166,7 @@
             style="@style/HintTextView.Value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintWidth_percent="0.7"
             app:layout_constraintStart_toStartOf="@id/barrier"
             app:layout_constraintBaseline_toBaselineOf="@id/firstNameHintTextView" />
 
@@ -175,7 +175,7 @@
             style="@style/HintTextView.Value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintWidth_percent="0.7"
             app:layout_constraintStart_toStartOf="@id/barrier"
             app:layout_constraintBaseline_toBaselineOf="@id/lastNameHintTextView" />
 
@@ -184,7 +184,7 @@
             style="@style/HintTextView.Value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintWidth_percent="0.7"
             app:layout_constraintStart_toStartOf="@id/barrier"
             app:layout_constraintBaseline_toBaselineOf="@id/emailHintTextView" />
 
@@ -193,7 +193,7 @@
             style="@style/HintTextView.Value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintWidth_percent="0.7"
             app:layout_constraintStart_toStartOf="@id/barrier"
             app:layout_constraintBaseline_toBaselineOf="@id/mobileHintTextView" />
 
@@ -202,7 +202,7 @@
             style="@style/HintTextView.Value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintWidth_percent="0.7"
             app:layout_constraintStart_toStartOf="@id/barrier"
             app:layout_constraintBaseline_toBaselineOf="@id/passwordHintTextView" />
 

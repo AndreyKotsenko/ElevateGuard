@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.akotsenko.elevateguard.Singletons
+import com.akotsenko.elevateguard.model.FacilityNotFoundException
 import com.akotsenko.elevateguard.model.auth.AuthRepository
 import com.akotsenko.elevateguard.model.facility.FacilityRepository
 import com.akotsenko.elevateguard.model.facility.entities.Facility
@@ -13,8 +14,10 @@ import com.akotsenko.elevateguard.model.user.UserRepository
 import com.akotsenko.elevateguard.model.user.entities.User
 import com.akotsenko.elevateguard.screens.auth.SignInViewModel
 import com.akotsenko.elevateguard.screens.base.BaseViewModel
+import com.akotsenko.elevateguard.utils.MutableLiveEvent
 import com.akotsenko.elevateguard.utils.MutableUnitLiveEvent
 import com.akotsenko.elevateguard.utils.publishEvent
+import com.akotsenko.elevateguard.utils.share
 import kotlinx.coroutines.launch
 
 class ManagerSettingsViewModel(
@@ -32,6 +35,9 @@ class ManagerSettingsViewModel(
 
     private val _facilityName = MutableLiveData<String>()
     val facilityName = _facilityName
+
+    private val _showFacilityNotFoundToastEvent = MutableLiveEvent<String>()
+    val showFacilityNotFoundToastEvent = _showFacilityNotFoundToastEvent.share()
 
     fun logout() {
         viewModelScope.launch {
@@ -77,9 +83,17 @@ class ManagerSettingsViewModel(
     fun updateFacility(facilityName: String) {
         viewModelScope.launch {
             showProgress()
-            facilityRepository.updateFacility(appSettingsRepository.getCurrentFacilityId().toString(), facilityName)
+            try {
+                facilityRepository.updateFacility(appSettingsRepository.getCurrentFacilityId().toString(), facilityName)
+            } catch (e: FacilityNotFoundException) {
+                processFacilityNotFoundException(e)
+            }
             hideProgress()
         }
+    }
+
+    private fun processFacilityNotFoundException(e: FacilityNotFoundException) {
+        _showFacilityNotFoundToastEvent.publishEvent(e.message.toString())
     }
 
     private fun showProgress() {

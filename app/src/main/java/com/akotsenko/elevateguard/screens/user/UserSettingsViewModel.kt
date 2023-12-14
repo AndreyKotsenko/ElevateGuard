@@ -11,7 +11,6 @@ import com.akotsenko.elevateguard.model.settings.AppSettingsRepository
 import com.akotsenko.elevateguard.model.settings.entities.SettingsUserData
 import com.akotsenko.elevateguard.model.user.UserRepository
 import com.akotsenko.elevateguard.model.user.entities.User
-import com.akotsenko.elevateguard.screens.manager.ManagerSettingsViewModel
 import com.akotsenko.elevateguard.utils.MutableUnitLiveEvent
 import com.akotsenko.elevateguard.utils.publishEvent
 import kotlinx.coroutines.launch

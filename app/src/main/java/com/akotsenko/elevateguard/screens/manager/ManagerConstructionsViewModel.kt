@@ -5,13 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.akotsenko.elevateguard.Singletons
 import com.akotsenko.elevateguard.model.AuthException
 import com.akotsenko.elevateguard.model.EmptyFieldException
+import com.akotsenko.elevateguard.model.FacilityNotFoundException
 import com.akotsenko.elevateguard.model.Field
 import com.akotsenko.elevateguard.model.construction.ConstructionRepository
 import com.akotsenko.elevateguard.model.construction.entities.Construction
 import com.akotsenko.elevateguard.model.facility.FacilityRepository
 import com.akotsenko.elevateguard.model.settings.AppSettingsRepository
 import com.akotsenko.elevateguard.screens.base.BaseViewModel
+import com.akotsenko.elevateguard.utils.MutableLiveEvent
+import com.akotsenko.elevateguard.utils.publishEvent
 import com.akotsenko.elevateguard.utils.requireValue
+import com.akotsenko.elevateguard.utils.share
 import kotlinx.coroutines.launch
 
 
@@ -27,6 +31,9 @@ class ManagerConstructionsViewModel(
     private val _constructions = MutableLiveData<List<Construction>>()
     val constructions = _constructions
 
+    private val _showFacilityNotFoundToastEvent = MutableLiveEvent<String>()
+    val showFacilityNotFoundToastEvent = _showFacilityNotFoundToastEvent.share()
+
 
     fun getConstructions() {
         viewModelScope.launch {
@@ -35,6 +42,8 @@ class ManagerConstructionsViewModel(
                 _constructions.value = facilityRepository.getConstructionOfFacility()
             } catch (e: AuthException) {
                 launchSignInScreen()
+            } catch (e: FacilityNotFoundException) {
+                processFacilityNotFoundException(e)
             } finally {
                 hideProgress()
             }
@@ -54,6 +63,8 @@ class ManagerConstructionsViewModel(
                 launchSignInScreen()
             } catch (e: EmptyFieldException) {
                 processEmptyFieldException(e)
+            } catch (e: FacilityNotFoundException) {
+                processFacilityNotFoundException(e)
             } finally {
                 hideProgress()
             }
@@ -70,6 +81,8 @@ class ManagerConstructionsViewModel(
                 launchSignInScreen()
             } catch (e: EmptyFieldException) {
                 processEmptyFieldException(e)
+            } catch (e: FacilityNotFoundException) {
+                processFacilityNotFoundException(e)
             } finally {
                 hideProgress()
             }
@@ -84,6 +97,8 @@ class ManagerConstructionsViewModel(
                 _constructions.value = facilityRepository.getConstructionOfFacility()
             } catch (e: AuthException) {
                 launchSignInScreen()
+            } catch (e: FacilityNotFoundException) {
+                processFacilityNotFoundException(e)
             } finally {
                 hideProgress()
             }
@@ -95,6 +110,10 @@ class ManagerConstructionsViewModel(
         _state.value = _state.requireValue().copy(
             emptyConstructionNameError = e.field == Field.ConstructionName
         )
+    }
+
+    private fun processFacilityNotFoundException(e: FacilityNotFoundException) {
+        _showFacilityNotFoundToastEvent.publishEvent(e.message.toString())
     }
 
 

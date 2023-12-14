@@ -39,7 +39,11 @@ class UserRepository(private val userSource: UserSource, private val appSettings
 
     suspend fun deleteUser(userId: String) {
         wrapBackendExceptions {
-            userSource.deleteUser(appSettings.getSettingsUserDataState().token, userId)
+            try {
+                userSource.deleteUser(appSettings.getSettingsUserDataState().token, userId)
+            } catch (e: BackendException) {
+                if (e.code == 400) throw FailedDeleteUserException(e.message.toString())
+            }
         }
     }
 
@@ -54,6 +58,13 @@ class UserRepository(private val userSource: UserSource, private val appSettings
     }
 
     suspend fun getFacilitiesOfUser(): List<FacilityOfUser> = wrapBackendExceptions {
-        return userSource.getFacilitiesOfUser(appSettings.getSettingsUserDataState().token)
+
+        val facilities = try {
+            userSource.getFacilitiesOfUser(appSettings.getSettingsUserDataState().token)
+        } catch (e: BackendException) {
+            if (e.code == 400) throw UserNotFoundException(e.message.toString())
+            else e
+        }
+        return facilities as List<FacilityOfUser>
     }
 }

@@ -26,6 +26,9 @@ class CreateFacilityViewModel(
     private val _showFacilityAlreadyExistToastEvent = MutableLiveEvent<String>()
     val showFacilityAlreadyExistEvent = _showFacilityAlreadyExistToastEvent.share()
 
+    private val _showFacilityNotFoundToastEvent = MutableLiveEvent<String>()
+    val showFacilityNotFoundToastEvent = _showFacilityNotFoundToastEvent.share()
+
     private val _navigateToAdminTabsEvent = MutableUnitLiveEvent()
     val navigateToAdminTabsEvent = _navigateToAdminTabsEvent
 
@@ -53,6 +56,8 @@ class CreateFacilityViewModel(
                 processEmptyFieldException(e)
             } catch (e: FacilityAlreadyExistException) {
                 processFacilityAlreadyExistException(e)
+            } catch (e: FacilityNotFoundException) {
+                processFacilityNotFoundException(e)
             } finally {
                 hideProgress()
             }
@@ -72,6 +77,10 @@ class CreateFacilityViewModel(
             emptyEmailError = e.field == Field.Email,
             emptyPasswordError = e.field == Field.Password
         )
+    }
+
+    private fun processFacilityNotFoundException(e: FacilityNotFoundException) {
+        _showFacilityNotFoundToastEvent.publishEvent(e.message.toString())
     }
 
     private fun processFacilityAlreadyExistException(e: FacilityAlreadyExistException){

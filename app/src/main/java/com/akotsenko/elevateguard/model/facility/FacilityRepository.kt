@@ -11,7 +11,14 @@ class FacilityRepository(private val facilitySource: FacilitySource, private val
 
 
     suspend fun getFacility(facilityId: String): Facility = wrapBackendExceptions {
-        return facilitySource.getFacility(appSettings.getSettingsUserDataState().token, facilityId)
+
+        val facility = try {
+            facilitySource.getFacility(appSettings.getSettingsUserDataState().token, facilityId)
+        } catch (e: BackendException) {
+            if (e.code == 400) throw FacilityNotFoundException(e.message.toString())
+            else e
+        }
+        return facility as Facility
     }
 
     suspend fun createFacility(name: String): Int = wrapBackendExceptions {
@@ -30,15 +37,36 @@ class FacilityRepository(private val facilitySource: FacilitySource, private val
     suspend fun updateFacility(facilityId: String, facilityName: String): String = wrapBackendExceptions {
         if (facilityName.isBlank()) throw EmptyFieldException(Field.FacilityName)
 
-        return facilitySource.updateFacility(appSettings.getSettingsUserDataState().token, facilityId, facilityName)
+        val result = try {
+            facilitySource.updateFacility(appSettings.getSettingsUserDataState().token, facilityId, facilityName)
+        } catch (e: BackendException) {
+            if (e.code == 400) throw FacilityNotFoundException(e.message.toString())
+            else e
+        }
+
+        return result as String
     }
 
     suspend fun getUsersByFacility(): List<User> = wrapBackendExceptions {
-        return facilitySource.getUsersByFacility(appSettings.getSettingsUserDataState().token, appSettings.getCurrentFacilityId().toString())
+
+        val users = try {
+            facilitySource.getUsersByFacility(appSettings.getSettingsUserDataState().token, appSettings.getCurrentFacilityId().toString())
+        } catch (e: BackendException) {
+            if(e.code == 400) throw FacilityNotFoundException(e.message.toString())
+            else e
+        }
+        return users as List<User>
     }
 
     suspend fun getConstructionOfFacility(): List<Construction> = wrapBackendExceptions {
-        return facilitySource.getFacility(appSettings.getSettingsUserDataState().token, appSettings.getCurrentFacilityId().toString()).constructionOfFacility
+
+        val constructions = try {
+            facilitySource.getFacility(appSettings.getSettingsUserDataState().token, appSettings.getCurrentFacilityId().toString()).constructionOfFacility
+        } catch (e: BackendException) {
+            if (e.code == 400) throw FacilityNotFoundException(e.message.toString())
+            else e
+        }
+        return constructions as List<Construction>
     }
 
     fun getCurrentFacilityId(): String = wrapBackendExceptions {
