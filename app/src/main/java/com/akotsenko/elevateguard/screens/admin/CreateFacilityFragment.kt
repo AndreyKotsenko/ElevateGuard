@@ -8,9 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.akotsenko.elevateguard.R
 import com.akotsenko.elevateguard.databinding.FragmentCreateFacilityManagerBinding
 import com.akotsenko.elevateguard.model.auth.entities.RegisterData
+import com.akotsenko.elevateguard.utils.findTopNavController
 import com.akotsenko.elevateguard.utils.observeEvent
 import com.akotsenko.elevateguard.utils.observeToSignInScreen
 
@@ -32,6 +34,7 @@ class CreateFacilityFragment: Fragment(R.layout.fragment_create_facility_manager
         observeState()
         observeShowFacilityAlreadyExistEvent()
         observeNavigateToAdminTabsEvent()
+        observeShowFacilityNotFoundToastEvent()
 
         binding.createButton.setOnClickListener {
             viewModel.createFacilityAndManager(binding.companyNameEditText.text.toString(), toRegisterData())
@@ -57,6 +60,15 @@ class CreateFacilityFragment: Fragment(R.layout.fragment_create_facility_manager
 
     private fun observeNavigateToAdminTabsEvent() = viewModel.navigateToAdminTabsEvent.observeEvent(viewLifecycleOwner) {
         findNavController().navigate(R.id.action_createFacilityFragment_to_managerTabsFragment)
+    }
+
+    private fun observeShowFacilityNotFoundToastEvent() = viewModel.showFacilityNotFoundToastEvent.observeEvent(viewLifecycleOwner) {
+        Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        findTopNavController().navigate(R.id.selectFacilityFragment, null, navOptions {
+            popUpTo(R.id.selectFacilityFragment) {
+                inclusive = true
+            }
+        })
     }
 
     private fun toRegisterData(): RegisterData {

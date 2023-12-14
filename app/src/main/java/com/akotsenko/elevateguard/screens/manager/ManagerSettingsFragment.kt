@@ -61,6 +61,7 @@ class ManagerSettingsFragment: Fragment(R.layout.fragment_manager_settings) {
         observeState()
         observeFacility()
         observeUser()
+        observeShowFacilityNotFoundToastEvent()
 
         viewModel.getCurrentUser()
         viewModel.getCurrentFacility()
@@ -86,6 +87,11 @@ class ManagerSettingsFragment: Fragment(R.layout.fragment_manager_settings) {
                 inclusive = true
             }
         })
+    }
+
+    private fun observeShowFacilityNotFoundToastEvent() = viewModel.showFacilityNotFoundToastEvent.observeEvent(viewLifecycleOwner) {
+        Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        navigateToSelectFacility()
     }
 
     private fun observeFacility() = viewModel.facilityName.observe(viewLifecycleOwner) {

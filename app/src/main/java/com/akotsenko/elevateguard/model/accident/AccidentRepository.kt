@@ -1,5 +1,6 @@
 package com.akotsenko.elevateguard.model.accident
 
+import com.akotsenko.elevateguard.model.*
 import com.akotsenko.elevateguard.model.accident.entities.Accident
 import com.akotsenko.elevateguard.model.settings.AppSettings
 import com.akotsenko.elevateguard.model.wrapBackendExceptions
@@ -10,16 +11,34 @@ class AccidentRepository(
 ) {
 
     suspend fun getAccident(accidentId: Int): Accident = wrapBackendExceptions {
-        return accidentSource.getAccident(appSettings.getSettingsUserDataState().token, accidentId)
+
+        val accident = try {
+            accidentSource.getAccident(appSettings.getSettingsUserDataState().token, accidentId)
+        } catch (e: BackendException) {
+            if (e.code == 400) throw AccidentNotFoundException(e.message.toString())
+            else e
+        }
+        return accident as Accident
     }
 
     suspend fun getAccidentsByFacility(): List<Accident> = wrapBackendExceptions {
-        return accidentSource.getAccidentsByFacility(appSettings.getSettingsUserDataState().token, appSettings.getCurrentFacilityId())
+        val accidents = try {
+            accidentSource.getAccidentsByFacility(appSettings.getSettingsUserDataState().token, appSettings.getCurrentFacilityId())
+        } catch (e: BackendException) {
+            if (e.code == 400) throw FacilityNotFoundException(e.message.toString())
+            else e
+        }
+
+        return accidents as List<Accident>
     }
 
     suspend fun createAccident(constructionId: Int) {
         wrapBackendExceptions {
-            accidentSource.createAccident(appSettings.getSettingsUserDataState().token, constructionId.toString())
+            try {
+                accidentSource.createAccident(appSettings.getSettingsUserDataState().token, constructionId.toString())
+            } catch (e: BackendException) {
+                if (e.code == 400) throw ConstructionNotFoundException(e.message.toString())
+            }
         }
     }
 }

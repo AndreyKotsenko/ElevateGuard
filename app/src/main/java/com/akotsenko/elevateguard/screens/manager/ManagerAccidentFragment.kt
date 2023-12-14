@@ -6,13 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.navOptions
 import com.akotsenko.elevateguard.R
 import com.akotsenko.elevateguard.databinding.DialogAddAccidentBinding
 import com.akotsenko.elevateguard.databinding.FragmentManagerAccidentBinding
 import com.akotsenko.elevateguard.screens.adapters.ManagerAccidentAdapter
+import com.akotsenko.elevateguard.utils.findTopNavController
+import com.akotsenko.elevateguard.utils.observeEvent
 import com.akotsenko.elevateguard.utils.observeToSignInScreen
 
 class ManagerAccidentFragment: Fragment(R.layout.fragment_manager_accident) {
@@ -37,6 +41,8 @@ class ManagerAccidentFragment: Fragment(R.layout.fragment_manager_accident) {
         observeAccidents()
         getAccidents()
         observeConstructions()
+        observeShowFacilityNotFoundToastEvent()
+        observeShowConstructionNotFoundEvent()
         observeToSignInScreen(viewModel.navigateToSignInEvent)
 
         binding.accidentList.adapter = adapter
@@ -49,6 +55,16 @@ class ManagerAccidentFragment: Fragment(R.layout.fragment_manager_accident) {
 
     private fun getAccidents() {
         viewModel.getAccidents()
+    }
+
+
+    private fun observeShowFacilityNotFoundToastEvent() = viewModel.showFacilityNotFoundToastEvent.observeEvent(viewLifecycleOwner) {
+        Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        findTopNavController().navigate(R.id.selectFacilityFragment, null, navOptions {
+            popUpTo(R.id.selectFacilityFragment) {
+                inclusive = true
+            }
+        })
     }
 
     // we can use this method when we want add new accident
@@ -89,6 +105,10 @@ class ManagerAccidentFragment: Fragment(R.layout.fragment_manager_accident) {
 
     private fun observeAccidents() = viewModel.accidents.observe(viewLifecycleOwner) {
         adapter.setList(it)
+    }
+
+    private fun observeShowConstructionNotFoundEvent() = viewModel.showConstructionNotFoundToastEvent.observeEvent(viewLifecycleOwner) {
+        Toast.makeText(requireContext(), it, Toast.LENGTH_LONG)
     }
 
 }

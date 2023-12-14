@@ -31,6 +31,26 @@ class FacilityAlreadyExistException(
     override val message: String
 ): AppException(message = message)
 
+class FacilityNotFoundException(
+    override val message: String
+): AppException(message = message)
+
+class ConstructionNotFoundException(
+    override val message: String
+): AppException(message = message)
+
+class UserNotFoundException(
+    override val message: String
+): AppException(message = message)
+
+class FailedDeleteUserException(
+    override val message: String
+): AppException(message = message)
+
+class AccidentNotFoundException(
+    override val message: String
+): AppException(message = message)
+
 class ConnectionException(cause: Throwable) : AppException(cause = cause)
 
 open class BackendException(

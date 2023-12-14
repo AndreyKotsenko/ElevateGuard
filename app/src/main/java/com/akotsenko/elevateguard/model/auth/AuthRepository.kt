@@ -42,6 +42,7 @@ class AuthRepository(private val authSource: AuthSource, private val appSettings
             authSource.register(appSettings.getSettingsUserDataState().token, registerData)
         } catch (e: BackendException) {
             if(e.code == 422) throw RegisterValidateException(e.message.toString())
+            else if (e.code == 400) throw FacilityNotFoundException(e.message.toString())
             else e
         }
 

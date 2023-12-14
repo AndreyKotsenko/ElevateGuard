@@ -4,14 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akotsenko.elevateguard.R
 import com.akotsenko.elevateguard.databinding.FragmentSelectFacilityBinding
 import com.akotsenko.elevateguard.model.user.entities.FacilityOfUser
 import com.akotsenko.elevateguard.screens.adapters.FacilitiesAdapter
+import com.akotsenko.elevateguard.utils.findTopNavController
+import com.akotsenko.elevateguard.utils.observeEvent
 import com.akotsenko.elevateguard.utils.observeToSignInScreen
 
 class SelectFacilityFragment: Fragment(R.layout.fragment_select_facility) {
@@ -34,6 +38,7 @@ class SelectFacilityFragment: Fragment(R.layout.fragment_select_facility) {
         observeToSignInScreen(viewModel.navigateToSignInEvent)
         observeState()
         observeCFacilities()
+        observeShowUserNotFoundEventToast()
 
         viewModel.getFacilities()
 
@@ -67,5 +72,14 @@ class SelectFacilityFragment: Fragment(R.layout.fragment_select_facility) {
 
     private fun observeState() = viewModel.state.observe(viewLifecycleOwner) {
         binding.progressBar.visibility = if (it.showProgress) View.VISIBLE else View.INVISIBLE
+    }
+
+    private fun observeShowUserNotFoundEventToast() = viewModel.showUserNotFoundEvent.observeEvent(viewLifecycleOwner) {
+        Toast.makeText(requireContext(), it, Toast.LENGTH_LONG)
+        findTopNavController().navigate(R.id.signInFragment, null, navOptions {
+            popUpTo(R.id.signInFragment) {
+                inclusive = true
+            }
+        })
     }
 }

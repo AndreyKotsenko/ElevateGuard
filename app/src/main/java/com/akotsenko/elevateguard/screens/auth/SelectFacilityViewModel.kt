@@ -4,10 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.akotsenko.elevateguard.Singletons
 import com.akotsenko.elevateguard.model.AuthException
+import com.akotsenko.elevateguard.model.UserNotFoundException
 import com.akotsenko.elevateguard.model.settings.AppSettingsRepository
 import com.akotsenko.elevateguard.model.user.UserRepository
 import com.akotsenko.elevateguard.model.user.entities.FacilityOfUser
 import com.akotsenko.elevateguard.screens.base.BaseViewModel
+import com.akotsenko.elevateguard.utils.MutableLiveEvent
+import com.akotsenko.elevateguard.utils.publishEvent
 import kotlinx.coroutines.launch
 
 class SelectFacilityViewModel(
@@ -21,6 +24,9 @@ class SelectFacilityViewModel(
     private val _state = MutableLiveData(State())
     val state = _state
 
+    private val _showUserNotFoundEvent = MutableLiveEvent<String>()
+    val showUserNotFoundEvent = _showUserNotFoundEvent
+
     private fun showProgress() {
         _state.value = State(signInInProgress = true)
     }
@@ -33,8 +39,14 @@ class SelectFacilityViewModel(
                 hideProgress()
             } catch (e: AuthException) {
                 launchSignInScreen()
+            } catch (e: UserNotFoundException) {
+
             }
         }
+    }
+
+    private fun processUserNotFoundException(e: UserNotFoundException) {
+        _showUserNotFoundEvent.publishEvent(e.message.toString())
     }
 
     fun getUserRole(): String {

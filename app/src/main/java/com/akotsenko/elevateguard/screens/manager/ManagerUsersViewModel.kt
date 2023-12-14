@@ -5,12 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.akotsenko.elevateguard.Singletons
 import com.akotsenko.elevateguard.model.AuthException
+import com.akotsenko.elevateguard.model.FacilityNotFoundException
+import com.akotsenko.elevateguard.model.FailedDeleteUserException
+import com.akotsenko.elevateguard.model.UserValidateException
 import com.akotsenko.elevateguard.model.auth.AuthRepository
 import com.akotsenko.elevateguard.model.auth.entities.RegisterData
 import com.akotsenko.elevateguard.model.facility.FacilityRepository
 import com.akotsenko.elevateguard.model.user.UserRepository
 import com.akotsenko.elevateguard.model.user.entities.User
 import com.akotsenko.elevateguard.screens.base.BaseViewModel
+import com.akotsenko.elevateguard.utils.MutableLiveEvent
+import com.akotsenko.elevateguard.utils.publishEvent
+import com.akotsenko.elevateguard.utils.share
 import kotlinx.coroutines.launch
 
 class ManagerUsersViewModel(
@@ -25,6 +31,15 @@ class ManagerUsersViewModel(
     private val _state = MutableLiveData(State())
     val state = _state
 
+    private val _showFacilityNotFoundToastEvent = MutableLiveEvent<String>()
+    val showFacilityNotFoundToastEvent = _showFacilityNotFoundToastEvent.share()
+
+    private val _showUserValidateToastEvent = MutableLiveEvent<String>()
+    val showUserValidateToastEvent = _showUserValidateToastEvent.share()
+
+    private val _showFailedDeleteUserToastEvent = MutableLiveEvent<String>()
+    val showFailedDeleteUserToastEvent = _showFailedDeleteUserToastEvent.share()
+
     fun getUsers() {
         viewModelScope.launch {
             showProgress()
@@ -32,6 +47,8 @@ class ManagerUsersViewModel(
                 _users.value = facilityRepository.getUsersByFacility()
             } catch (e: AuthException) {
                 launchSignInScreen()
+            } catch (e: FacilityNotFoundException) {
+                processFacilityNotFoundException(e)
             } finally {
                 hideProgress()
             }
@@ -50,6 +67,12 @@ class ManagerUsersViewModel(
                 _users.value = facilityRepository.getUsersByFacility()
             } catch (e: AuthException) {
                 launchSignInScreen()
+            } catch (e: FacilityNotFoundException) {
+                processFacilityNotFoundException(e)
+            } catch (e: UserValidateException) {
+                processUserValidateException(e)
+            } catch (e: FailedDeleteUserException) {
+                processFailedDeleteUserException(e)
             } finally {
                 hideProgress()
             }
@@ -66,6 +89,8 @@ class ManagerUsersViewModel(
                 _users.value = facilityRepository.getUsersByFacility()
             } catch (e: AuthException) {
                 launchSignInScreen()
+            } catch (e: FacilityNotFoundException) {
+                processFacilityNotFoundException(e)
             } finally {
                 hideProgress()
             }
@@ -80,10 +105,24 @@ class ManagerUsersViewModel(
                 _users.value = facilityRepository.getUsersByFacility()
             } catch (e: AuthException) {
                 launchSignInScreen()
+            } catch (e: FacilityNotFoundException) {
+                processFacilityNotFoundException(e)
             } finally {
                 hideProgress()
             }
         }
+    }
+
+    private fun processFacilityNotFoundException(e: FacilityNotFoundException) {
+        _showFacilityNotFoundToastEvent.publishEvent(e.message.toString())
+    }
+
+    private fun processUserValidateException(e: UserValidateException) {
+        _showUserValidateToastEvent.publishEvent(e.message.toString())
+    }
+
+    private fun processFailedDeleteUserException(e: FailedDeleteUserException) {
+        _showFailedDeleteUserToastEvent.publishEvent(e.message.toString())
     }
 
     fun getCurrentFacilityId(): String {
